@@ -1,0 +1,73 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using UniversityManagament.Models.Dto;
+using UniversityManagament.Services;
+
+namespace UniversityManagament.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    public class ExamController : ControllerBase
+    {
+        private readonly ExamService _examService;
+
+        public ExamController(ExamService examService)
+        {
+            _examService = examService;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<ExamDto>>> GetExams()
+        {
+            var exams = await _examService.GetExams();
+
+            return Ok(exams);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ExamDto>> GetExam(Guid id)
+        {
+            var exam = await _examService.GetExam(id);
+
+            if (exam == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(exam);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<ExamDto>> CreateExam(CreateExamDto createExamDto)
+        {
+            var exam = await _examService.CreateExam(createExamDto);
+
+            return Ok(exam);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult> updateExam(Guid Id, CreateExamDto updateExamDto)
+        {
+            var exam = await _examService.updateExam(Id, updateExamDto);
+
+            if (exam == null)
+            {
+                return NotFound();
+            }
+            
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> deleteExam(Guid id)
+        {
+            var exam = await _examService.deleteExam(id);
+
+            if (exam == null)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
+        }
+    }
+}
