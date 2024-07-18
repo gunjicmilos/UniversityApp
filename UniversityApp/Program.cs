@@ -70,6 +70,7 @@ builder.Services.AddScoped<SubjectService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<FinanceService>();
 builder.Services.AddScoped<TokenService>();
+builder.Services.AddScoped<TransactionService>();
 
 
 var app = builder.Build();
