@@ -16,8 +16,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-string connectionString = "Server=127.0.0.1,1433;Database=UniversityDB;User Id=sa;Password=Nemamsifru.99;TrustServerCertificate=True;";
-//string connectionString = "Server=localhost; Database=UniversityManagament; Trusted_Connection=True;";
+//string connectionString = "Server=127.0.0.1,1433;Database=UniversityDB;User Id=sa;Password=Nemamsifru.99;TrustServerCertificate=True;";
+string connectionString = "Server=localhost; Database=UniversityManagament; Trusted_Connection=True;";
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
