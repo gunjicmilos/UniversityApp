@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using UniversityManagament.Data;
-using UniversityManagament.Models;
 using UniversityManagament.Models.Dto;
+using UniversityManagament.Services;
 
 namespace UniversityManagament.Controllers
 {
@@ -10,33 +8,16 @@ namespace UniversityManagament.Controllers
     [Route("api/[controller]")]
     public class UniversityController : ControllerBase
     {
-        private readonly DataContext _context;
-        public UniversityController(DataContext context)
+        private readonly UniversityService _universityService;
+        public UniversityController(UniversityService universityService)
         {
-            _context = context;
+            _universityService = universityService;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UniversityDto>>> GetUniversities([FromQuery] string? name = null, [FromQuery] string? location = null)
         {
-            var universities = await _context.Universities
-                .Select(u => new UniversityDto
-                {
-                    Id = u.Id,
-                    Name = u.Name,
-                    Location = u.Location,
-                })
-                .ToListAsync();
-
-            if (!string.IsNullOrWhiteSpace(name))
-            {
-                universities = universities.Where(u => u.Name.Contains(name)).ToList();
-            }
-
-            if (!string.IsNullOrWhiteSpace(location))
-            {
-                universities = universities.Where(u => u.Location.Contains(location)).ToList();
-            }
+            var universities = await _universityService.GetUniversities();
 
             return Ok(universities);
         }
@@ -44,14 +25,7 @@ namespace UniversityManagament.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<UniversityDto>> GetUniversitiy(Guid id)
         {
-            var universities = await _context.Universities
-                .Select(u => new UniversityDto
-                {
-                    Id = u.Id,
-                    Name = u.Name,
-                    Location = u.Location,
-                })
-                .FirstOrDefaultAsync(u => u.Id == id);
+            var universities = await _universityService.GetUniversitiy(id);
 
             if (universities == null)
             {
@@ -64,40 +38,19 @@ namespace UniversityManagament.Controllers
         [HttpPost]
         public async Task<ActionResult<UniversityDto>> CreateUniversity(CreateUniversityDto createUniversityDto)
         {
-            var university = new University()
-            {
-                Name = createUniversityDto.Name,
-                Location = createUniversityDto.Location
-            };
-            
-            _context.Universities.Add(university);
-            await _context.SaveChangesAsync();
-
-            var universityDto = new UniversityDto()
-            {
-                Id = university.Id,
-                Name = university.Name,
-                Location = university.Location
-            };
-
-            return Ok(universityDto);
+            var university = _universityService.CreateUniversity(createUniversityDto);
+            return Ok(university);
         }
 
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateUniversitiy(Guid id, CreateUniversityDto updateUniversityDto)
         {
-            var university = await _context.Universities.FindAsync(id);
+            var university = await _universityService.UpdateUniversitiy(id, updateUniversityDto);
 
             if (university == null)
             {
                 return NotFound($"University with id {id} not found");
             }
-
-            university.Name = updateUniversityDto.Name;
-            university.Location = updateUniversityDto.Location;
-
-            _context.Entry(university).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
 
             return NoContent();
         }
@@ -105,15 +58,12 @@ namespace UniversityManagament.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteUniversitiy(Guid id)
         {
-            var university = await _context.Universities.FindAsync(id);
+            var university = await _universityService.DeleteUniversitiy(id);
 
             if (university == null)
             {
                 return NotFound($"University with id {id} not found");
             }
-
-            _context.Universities.Remove(university);
-            await _context.SaveChangesAsync();
 
             return NoContent();
         }

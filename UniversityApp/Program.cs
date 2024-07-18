@@ -71,6 +71,8 @@ builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<FinanceService>();
 builder.Services.AddScoped<TokenService>();
 builder.Services.AddScoped<TransactionService>();
+builder.Services.AddScoped<UniversityService>();
+
 
 
 var app = builder.Build();
