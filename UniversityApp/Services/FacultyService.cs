@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using UniversityApp.Repository.IRepository;
 using UniversityManagament.Data;
 using UniversityManagament.Models;
 using UniversityManagament.Models.Dto;
@@ -10,30 +11,17 @@ namespace UniversityManagament.Services;
 public class FacultyService : IFacultyService
 {
     private readonly DataContext _context;
+    private readonly IFacultyRepository _facultyRepository;
 
-    public FacultyService(DataContext context)
+    public FacultyService(DataContext context, IFacultyRepository facultyRepository)
     {
         _context = context;
+        _facultyRepository = facultyRepository;
     }
 
         public async Task<ActionResult<IEnumerable<FacultyDto>>> GetFaculties([FromQuery] string? name = null, [FromQuery] string? location = null, [FromQuery] Guid? UniversityId = null)
         {
-            var faculties = await _context.Faculties
-                .Include(f => f.UserFaculties)
-                .Select(f => new FacultyDto
-                {
-                    Id = f.Id,
-                    Name = f.Name,
-                    Location = f.Location,
-                    UniversityId = f.UniversityId,
-                    Departments = f.Departments.Select(d => new DepartmentDto
-                    {
-                        Id = d.Id,
-                        Name = d.Name,
-                        FacultyId = d.FacultyId,
-                    }).ToList(),
-                })
-                .ToListAsync();
+            var faculties = await _facultyRepository.GetAllFacultiesAsync();
 
             if (!string.IsNullOrWhiteSpace(name))
             {
@@ -55,24 +43,7 @@ public class FacultyService : IFacultyService
 
         public async Task<ActionResult<FacultyDto>> GetFaculty(Guid id)
         {
-            var faculties = await _context.Faculties
-                .Include(f => f.UserFaculties)
-                .Select(f => new FacultyDto
-                {
-                    Id = f.Id,
-                    Name = f.Name,
-                    Location = f.Location,
-                    UniversityId = f.UniversityId,
-                    Departments = f.Departments.Select(d => new DepartmentDto
-                    {
-                        Id = d.Id,
-                        Name = d.Name,
-                        FacultyId = d.FacultyId,
-                    }).ToList(),
-                })
-                .FirstOrDefaultAsync(f => f.Id == id);
-
-            return faculties;
+            return await _facultyRepository.GetFacultyByIdAsync(id);
         }
 
         public async Task<ActionResult<FacultyWithoutDepartmentsAndUsersDto>> CreateFaculty(CreateFacultyDto createFacultyDto)
@@ -84,8 +55,7 @@ public class FacultyService : IFacultyService
                 UniversityId = createFacultyDto.UniversityId,
             };
 
-            _context.Faculties.Add(faculty);
-            await _context.SaveChangesAsync();
+            await _facultyRepository.AddFacultyAsync(faculty);
 
             var facultyDto = new FacultyWithoutDepartmentsAndUsersDto()
             {
@@ -108,14 +78,8 @@ public class FacultyService : IFacultyService
             faculty.UniversityId = updateFacultyDto.UniversityId;
 
             faculty.UserFaculties.Clear();
-            //faculty.UserFaculties = updateFacultyDto.UserIds.Select(userId => new UserFaculty
-            //{
-            //    UserId = userId,
-            //    FacultyId = faculty.Id,
-            //}).ToList();
 
-            _context.Entry(faculty).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            await _facultyRepository.UpdateFacultyAsync(faculty);
 
             return faculty;
         }
@@ -127,49 +91,19 @@ public class FacultyService : IFacultyService
             var faculty = await _context.Faculties
                 .Include(f => f.UserFaculties)
                 .FirstOrDefaultAsync(f => f.Id == id);
-            
-            _context.Faculties.Remove(faculty);
-            await _context.SaveChangesAsync();
+
+            await _facultyRepository.DeleteFacultyAsync(id);
 
             return faculty;
         }
 
-        public async Task<ActionResult<Faculty>> AddUserToFaculty(AssignUserDto addUserDto)
+        public async Task<ActionResult<User>> AddUserToFaculty(AssignUserDto addUserDto)
         {
-            var faculty = await _context.Faculties
-                .Include(faculty => faculty.UserFaculties)
-                .FirstOrDefaultAsync(f => f.Id == addUserDto.FacultyId);
-
-            var user = await _context.Users
-                .Include(u => u.UserFaculties)
-                .FirstOrDefaultAsync(u => u.Id == addUserDto.UserId);
-
-            var userFaculty = new UserFaculty()
-            {
-                UserId = addUserDto.UserId,
-                FacultyId = addUserDto.FacultyId,
-            };
-
-            faculty.UserFaculties.Add(userFaculty);
-
-            await _context.SaveChangesAsync();
-
-            return faculty;
+             return await _facultyRepository.AddUserToFacultyAsync(addUserDto);
         }
 
         public async Task<ActionResult<Faculty>> DeleteUserFromFaculty(AssignUserDto removeUserDto)
         {
-            var faculty = await _context.Faculties
-                .Include(faculty => faculty.UserFaculties)
-                .FirstOrDefaultAsync(f => f.Id == removeUserDto.FacultyId);
-            
-            var userFaculty = faculty.UserFaculties
-                .FirstOrDefault(uf => uf.UserId == removeUserDto.UserId);
-
-            faculty.UserFaculties.Remove(userFaculty);
-            await _context.SaveChangesAsync();
-
-            return faculty;
-
+            return await _facultyRepository.RemoveUserFromFacultyAsync(removeUserDto);
         }
 }

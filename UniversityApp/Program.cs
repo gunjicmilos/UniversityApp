@@ -3,6 +3,8 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using UniversityApp.Repository;
+using UniversityApp.Repository.IRepository;
 using UniversityManagament.Data;
 using UniversityManagament.Models;
 using UniversityManagament.Services;
@@ -73,6 +75,12 @@ builder.Services.AddScoped<IFinanceService, FinanceService>();
 builder.Services.AddScoped<ITokenService,TokenService>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<IUniversityService, UniversityService>();
+
+builder.Services.AddScoped<IDepartmentsRepository, DepartmentsRepository>();
+builder.Services.AddScoped<IExamPeriodRepository, ExamPeriodRepository>();
+builder.Services.AddScoped<IExamRepository, ExamRepository>();
+builder.Services.AddScoped<IFacultyRepository, FacultyRepository>();
+
 
 
 

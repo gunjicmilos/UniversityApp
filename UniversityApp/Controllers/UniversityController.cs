@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using UniversityManagament.Models.Dto;
 using UniversityManagament.Services;
+using UniversityManagament.Services.Interfaces;
 
 namespace UniversityManagament.Controllers
 {
@@ -8,8 +9,8 @@ namespace UniversityManagament.Controllers
     [Route("api/[controller]")]
     public class UniversityController : ControllerBase
     {
-        private readonly UniversityService _universityService;
-        public UniversityController(UniversityService universityService)
+        private readonly IUniversityService _universityService;
+        public UniversityController(IUniversityService universityService)
         {
             _universityService = universityService;
         }

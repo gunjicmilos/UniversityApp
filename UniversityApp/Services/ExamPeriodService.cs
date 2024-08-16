@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using UniversityApp.Repository.IRepository;
 using UniversityManagament.Data;
 using UniversityManagament.Models;
 using UniversityManagament.Models.Dto;
@@ -10,41 +11,23 @@ namespace UniversityManagament.Services;
 public class ExamPeriodService : IExamPeriodService
 {
     private readonly DataContext _context;
+    private readonly IExamPeriodRepository _periodRepository;
 
-    public ExamPeriodService(DataContext context)
+    public ExamPeriodService(DataContext context, IExamPeriodRepository periodRepository)
     {
         _context = context;
+        _periodRepository = periodRepository;
     }
 
-    public async Task<ActionResult<IEnumerable<ExamPeriodDto>>> GetExamPeriods()
-        {
-            var examPeriods = await _context.ExamPeriods
-                .Select(ep => new ExamPeriodDto
-                {
-                    Id = ep.Id,
-                    Name = ep.Name,
-                    StartDate = ep.StartDate,
-                    EndData = ep.EndDate,
-                    FacultyId = ep.FacultyId,
-                }).ToListAsync();
+    public async Task<IEnumerable<ExamPeriodDto>> GetExamPeriodsAsync()
+    {
+        return await _periodRepository.GetAllExamPeriodsAsync();
+    }
 
-            return examPeriods;
-        }
-
-        public async Task<ActionResult<ExamPeriodDto>> GetExamPeriod(Guid id)
-        {
-            var examPeriod = await _context.ExamPeriods
-                .Select(ep => new ExamPeriodDto
-                {
-                    Id = ep.Id,
-                    Name = ep.Name,
-                    StartDate = ep.StartDate,
-                    EndData = ep.EndDate,
-                    FacultyId = ep.FacultyId,
-                }).FirstOrDefaultAsync(e => e.Id == id);
-
-            return examPeriod;
-        }
+    public async Task<ExamPeriodDto> GetExamPeriodByIdAsync(Guid id)
+    {
+        return await _periodRepository.GetExamPeriodByIdAsync(id);
+    }
 
         public async Task<ActionResult<ExamPeriodDto>> CreateExamPeriod(CreateExamPeriodDto createExamPeriodDto)
         {
@@ -56,8 +39,7 @@ public class ExamPeriodService : IExamPeriodService
                 FacultyId = createExamPeriodDto.FacultyId
             };
 
-            _context.ExamPeriods.Add(examPeriod);
-            await _context.SaveChangesAsync();
+            await _periodRepository.AddExamPeriodAsync(examPeriod);
 
             var examPeriodDto = new ExamPeriodDto
             {
@@ -80,8 +62,7 @@ public class ExamPeriodService : IExamPeriodService
             examPeriod.EndDate = updateExamPeriodDto.EndDate;
             examPeriod.FacultyId = updateExamPeriodDto.FacultyId;
 
-            _context.Entry(examPeriod).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            await _periodRepository.UpdateExamPeriodAsync(examPeriod);
 
             return examPeriod;
         }
@@ -90,8 +71,7 @@ public class ExamPeriodService : IExamPeriodService
         {
             var examPeriod = await _context.ExamPeriods.FindAsync(id);
 
-            _context.ExamPeriods.Remove(examPeriod);
-            await _context.SaveChangesAsync();
+            await _periodRepository.DeleteExamPeriodAsync(examPeriod);
 
             return examPeriod;
         }

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UniversityManagament.Models.Dto;
 using UniversityManagament.Services;
+using UniversityManagament.Services.Interfaces;
 
 namespace UniversityManagament.Controllers;
 
@@ -10,9 +11,9 @@ namespace UniversityManagament.Controllers;
 [Authorize]
 public class FinanceController : ControllerBase
 {
-    private readonly FinanceService _financeService;
+    private readonly IFinanceService _financeService;
 
-    public FinanceController(FinanceService financeService)
+    public FinanceController(IFinanceService financeService)
     {
         _financeService = financeService;
     }

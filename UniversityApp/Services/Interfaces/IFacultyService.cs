@@ -11,6 +11,6 @@ public interface IFacultyService
     Task<ActionResult<FacultyWithoutDepartmentsAndUsersDto>> CreateFaculty(CreateFacultyDto createFacultyDto);
     Task<ActionResult<Faculty>> UpdateFaculty(Guid id, CreateFacultyDto updateFacultyDto);
     Task<ActionResult<Faculty>> DeleteFaculty(Guid id);
-    Task<ActionResult<Faculty>> AddUserToFaculty(AssignUserDto addUserDto);
+    Task<ActionResult<User>> AddUserToFaculty(AssignUserDto addUserDto);
     Task<ActionResult<Faculty>> DeleteUserFromFaculty(AssignUserDto removeUserDto);
 }

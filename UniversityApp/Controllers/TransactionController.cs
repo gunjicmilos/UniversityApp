@@ -4,6 +4,7 @@ using UniversityManagament.Data;
 using UniversityManagament.Models;
 using UniversityManagament.Models.Dto;
 using UniversityManagament.Services;
+using UniversityManagament.Services.Interfaces;
 
 namespace UniversityManagament.Controllers;
 
@@ -11,9 +12,9 @@ namespace UniversityManagament.Controllers;
 [Route("api/[controller]")]
 public class TransactionController : ControllerBase
 {
-    private readonly TransactionService _transactionService; 
+    private readonly ITransactionService _transactionService; 
 
-    public TransactionController(TransactionService transactionService)
+    public TransactionController(ITransactionService transactionService)
     {
         _transactionService = transactionService;
     }

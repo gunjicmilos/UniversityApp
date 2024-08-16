@@ -2,6 +2,7 @@
 using UniversityManagament.Models;
 using UniversityManagament.Models.Dto;
 using UniversityManagament.Services;
+using UniversityManagament.Services.Interfaces;
 
 namespace UniversityManagament.Controllers
 {
@@ -10,10 +11,10 @@ namespace UniversityManagament.Controllers
     public class UserController : ControllerBase
     {
 
-        private readonly UserService _userService;
-        private readonly TokenService _tokenService;
+        private readonly IUserService _userService;
+        private readonly ITokenService _tokenService;
 
-        public UserController(UserService userService, TokenService tokenService)
+        public UserController(IUserService userService, ITokenService tokenService)
         {
             _userService = userService;
             _tokenService = tokenService;

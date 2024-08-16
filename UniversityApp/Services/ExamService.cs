@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using UniversityApp.Repository.IRepository;
 using UniversityManagament.Data;
 using UniversityManagament.Models;
 using UniversityManagament.Models.Dto;
@@ -10,46 +11,22 @@ namespace UniversityManagament.Services;
 public class ExamService : IExamService
 {
     private readonly DataContext _context;
+    private readonly IExamRepository _examRepository;
 
-    public ExamService(DataContext context)
+    public ExamService(DataContext context, IExamRepository examRepository)
     {
         _context = context;
+        _examRepository = examRepository;
     }
 
     public async Task<ActionResult<IEnumerable<ExamDto>>> GetExams()
     {
-        var exams = await _context.Exams
-            .Include(e => e.UserExams)
-            .Select(e => new ExamDto
-            {
-                Id = e.Id,
-                Name = e.Name,
-                Date = e.Date,
-                SubjectId = e.SubjectId,
-                ExamPeriodId = e.ExamPeriodId,
-                UserIds = e.UserExams.Select(ue => ue.UserId).ToList()
-            })
-            .ToListAsync();
-
-        return exams;
+        return await _examRepository.GetAllExamsAsync();
     }
 
     public async Task<ActionResult<ExamDto>> GetExam(Guid id)
     {
-        var exam = await _context.Exams
-            .Include(e => e.UserExams)
-            .Select(e => new ExamDto
-            {
-                Id = e.Id,
-                Name = e.Name,
-                Date = e.Date,
-                SubjectId = e.SubjectId,
-                ExamPeriodId = e.ExamPeriodId,
-                UserIds = e.UserExams.Select(ue => ue.UserId).ToList()
-            })
-            .FirstOrDefaultAsync(e => e.Id == id);
-            
-        return exam;
+        return await _examRepository.GetExamByIdAsync(id);
     }
 
     public async Task<ActionResult<ExamDto>> CreateExam(CreateExamDto createExamDto)
@@ -68,8 +45,7 @@ public class ExamService : IExamService
             exam.UserExams.AddRange(users.Select(u => new UserExam { UserId = u.Id, ExamId = exam.Id }));
         }
 
-        _context.Exams.Add(exam);
-        await _context.SaveChangesAsync();
+        await _examRepository.CreateExamAsync(exam);
 
         var examDto = new ExamDto
         {
@@ -100,8 +76,7 @@ public class ExamService : IExamService
             exam.UserExams.AddRange(users.Select(u => new UserExam { UserId = u.Id, ExamId = exam.Id }));
         }
 
-        _context.Entry(exam).State = EntityState.Modified;
-        await _context.SaveChangesAsync();
+        await _examRepository.UpdateExamAsync(exam);
 
         return exam;
     }
@@ -109,9 +84,8 @@ public class ExamService : IExamService
     public async Task<ActionResult<Exam>> DeleteExam(Guid Id)
     {
         var exam = await _context.Exams.Include(e => e.UserExams).FirstOrDefaultAsync(e => e.Id == Id);
-            
-        _context.Exams.Remove(exam);
-        await _context.SaveChangesAsync();
+
+        await _examRepository.DeleteExamAsync(Id);
 
         return exam;
     }

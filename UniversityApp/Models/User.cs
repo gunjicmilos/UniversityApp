@@ -7,6 +7,7 @@
         public string Email { get; set; }
         public string Role { get; set; }
         public string Password { get; set; }
+        public string? Index { get; set; }
         public ICollection<UserFaculty> UserFaculties { get; set; }
         public ICollection<UserSubject> UserSubjects { get; set; }
 

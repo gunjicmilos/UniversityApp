@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using UniversityManagament.Models.Dto;
 using UniversityManagament.Services;
+using UniversityManagament.Services.Interfaces;
 
 namespace UniversityManagament.Controllers
 {
@@ -9,9 +10,9 @@ namespace UniversityManagament.Controllers
     public class ExamPeriodController : ControllerBase
     {
 
-        private readonly ExamPeriodService _examPeriodService;
+        private readonly IExamPeriodService _examPeriodService;
 
-        public ExamPeriodController(ExamPeriodService examPeriodService)
+        public ExamPeriodController(IExamPeriodService examPeriodService)
         {
             _examPeriodService = examPeriodService;
         }
@@ -19,7 +20,7 @@ namespace UniversityManagament.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ExamPeriodDto>>> GetExamPeriods()
         {
-            var examPeriods = await _examPeriodService.GetExamPeriods();
+            var examPeriods = await _examPeriodService.GetExamPeriodsAsync();
 
             return Ok(examPeriods);
         }
@@ -27,7 +28,7 @@ namespace UniversityManagament.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ExamPeriodDto>> GetExamPeriod(Guid id)
         {
-            var examPeriod = await _examPeriodService.GetExamPeriod(id);
+            var examPeriod = await _examPeriodService.GetExamPeriodByIdAsync(id);
 
             if (examPeriod == null)
             {

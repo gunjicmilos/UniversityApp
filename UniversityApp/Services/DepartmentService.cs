@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using UniversityApp.Repository.IRepository;
 using UniversityManagament.Data;
 using UniversityManagament.Models;
 using UniversityManagament.Models.Dto;
@@ -10,23 +10,18 @@ namespace UniversityManagament.Services;
 public class DepartmentService : IDepartmentService
 {
     private readonly DataContext _context;
+    private readonly IDepartmentsRepository _departmentsRepository;
 
-    public DepartmentService(DataContext context)
+    public DepartmentService(DataContext context, IDepartmentsRepository departmentsRepository)
     {
         _context = context;
+        _departmentsRepository = departmentsRepository;
     }
 
     public async Task<ActionResult<IEnumerable<DepartmentDto>>> GetDepartmentsAsync([FromQuery] string? name = null,
         [FromQuery] Guid? facultyId = null)
     {
-        var departments = await _context.Departments
-            .Select(d => new DepartmentDto
-            {
-                Id = d.Id,
-                Name = d.Name,
-                FacultyId = d.FacultyId
-            })
-            .ToListAsync();
+        var departments = await _departmentsRepository.GetDepartmentsAsync();
 
         if (!string.IsNullOrWhiteSpace(name))
         {
@@ -43,15 +38,7 @@ public class DepartmentService : IDepartmentService
 
     public async Task<ActionResult<DepartmentDto>> GetDepartmentAsync(Guid id)
     {
-        var department = await _context.Departments
-            .Select(d => new DepartmentDto
-            {
-                Id = d.Id,
-                Name = d.Name,
-                FacultyId = d.FacultyId
-            })
-            .FirstOrDefaultAsync(d => d.Id == id);
-
+        var department = await _departmentsRepository.GetDepartmentByIdAsync(id);
         return department;
     }
     
@@ -63,8 +50,7 @@ public class DepartmentService : IDepartmentService
             FacultyId = createDepartmentsDto.FacultyId,
         };
 
-        _context.Departments.Add(department);
-        await _context.SaveChangesAsync();
+        await _departmentsRepository.AddDepartmentAsync(department);
 
         var departmentsDto = new DepartmentDto()
         {
@@ -75,28 +61,18 @@ public class DepartmentService : IDepartmentService
 
         return departmentsDto;
     }
-    
-    public async Task<ActionResult<Department>> UpdateDepartment(Guid id, CreateDepartmentsDto updateDepartmentsDto)
+    public async Task<Department> UpdateDepartmentAsync(Guid id, CreateDepartmentsDto updateDepartmentDto)
     {
-        var department = await _context.Departments.FirstOrDefaultAsync(d => d.Id == id);
-        
-        department.Name = updateDepartmentsDto.Name;
-        department.FacultyId = updateDepartmentsDto.FacultyId;
-
-        _context.Entry(department).State = EntityState.Modified;
-        await _context.SaveChangesAsync();
-
-        return department;
+        return await _departmentsRepository.UpdateDepartmentAsync(id, updateDepartmentDto);
     }
 
-    public async Task<ActionResult<Department>> DeleteDepartment(Guid id)
+    public Task DeleteDepartmentAsync(Guid id)
     {
-        var department = await _context.Departments.FirstOrDefaultAsync(d => d.Id == id);
-        
-        _context.Departments.Remove(department);
-        await _context.SaveChangesAsync();
-
-        return department;
+        throw new NotImplementedException();
     }
 
+    public async Task DeleteDepartment(Guid id)
+    {
+        await _departmentsRepository.DeleteDepartmentAsync(id);
+    }
 }

@@ -1,0 +1,75 @@
+using Microsoft.EntityFrameworkCore;
+using UniversityApp.Repository.IRepository;
+using UniversityManagament.Data;
+using UniversityManagament.Models;
+using UniversityManagament.Models.Dto;
+
+namespace UniversityApp.Repository;
+
+public class ExamRepository : IExamRepository
+{ 
+    private readonly DataContext _context;
+
+    public ExamRepository(DataContext context)
+    {
+        _context = context;
+    }
+    
+    public async Task<List<ExamDto>> GetAllExamsAsync()
+    {
+        var exams = await _context.Exams
+            .Include(e => e.UserExams)
+            .Select(e => new ExamDto
+            {
+                Id = e.Id,
+                Name = e.Name,
+                Date = e.Date,
+                SubjectId = e.SubjectId,
+                ExamPeriodId = e.ExamPeriodId,
+                UserIds = e.UserExams.Select(ue => ue.UserId).ToList()
+            })
+            .ToListAsync();
+
+        return exams;
+    }
+    
+    public async Task<ExamDto> GetExamByIdAsync(Guid id)
+    {
+        var exam = await _context.Exams
+            .Include(e => e.UserExams)
+            .Select(e => new ExamDto
+            {
+                Id = e.Id,
+                Name = e.Name,
+                Date = e.Date,
+                SubjectId = e.SubjectId,
+                ExamPeriodId = e.ExamPeriodId,
+                UserIds = e.UserExams.Select(ue => ue.UserId).ToList()
+            })
+            .FirstOrDefaultAsync(e => e.Id == id);
+            
+        return exam;
+    }
+
+    public async Task CreateExamAsync(Exam exam)
+    {
+        _context.Exams.Add(exam);
+        await _context.SaveChangesAsync();
+    }
+    
+    public async Task UpdateExamAsync(Exam exam)
+    {
+        _context.Entry(exam).State = EntityState.Modified;
+        await _context.SaveChangesAsync();
+    }
+    
+    public async Task DeleteExamAsync(Guid id)
+    {
+        var exam = await _context.Exams.FindAsync(id);
+        if (exam != null)
+        {
+            _context.Exams.Remove(exam);
+            await _context.SaveChangesAsync();
+        }
+    }
+}

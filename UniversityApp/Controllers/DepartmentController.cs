@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using UniversityManagament.Models;
 using UniversityManagament.Models.Dto;
 using UniversityManagament.Services;
+using UniversityManagament.Services.Interfaces;
 
 namespace UniversityManagament.Controllers
 {
@@ -8,9 +10,9 @@ namespace UniversityManagament.Controllers
     [Route("api/[controller]")]
     public class DepartmentController : ControllerBase
     {
-        private readonly DepartmentService _departmentService;
+        private readonly IDepartmentService _departmentService;
 
-        public DepartmentController(DepartmentService departmentService)
+        public DepartmentController(IDepartmentService departmentService)
         {
             _departmentService = departmentService;
         }
@@ -42,9 +44,9 @@ namespace UniversityManagament.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateDepartment(Guid id, CreateDepartmentsDto updateDepartmentsDto)
+        public async Task<ActionResult<Department>> UpdateDepartment(Guid id, CreateDepartmentsDto updateDepartmentsDto)
         {
-            var department = await _departmentService.UpdateDepartment(id, updateDepartmentsDto);
+            var department = await _departmentService.UpdateDepartmentAsync(id, updateDepartmentsDto);
             if (department == null)
             {
                 return NotFound();
@@ -56,14 +58,8 @@ namespace UniversityManagament.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteDepartment(Guid id)
         {
-            var department = await _departmentService.DeleteDepartment(id);
-
-            if (department == null)
-            {
-                return NotFound();
-            }
-            
-            return Ok(department);
+            await _departmentService.DeleteDepartment(id);
+            return NoContent();
         }
     }
 }
