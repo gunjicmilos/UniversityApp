@@ -2,10 +2,11 @@ using Microsoft.EntityFrameworkCore;
 using UniversityManagament.Data;
 using UniversityManagament.Models;
 using UniversityManagament.Models.Dto;
+using UniversityManagament.Services.Interfaces;
 
 namespace UniversityManagament.Services;
 
-public class FinanceService
+public class FinanceService : IFinanceService
 {
     private readonly DataContext _context;
 

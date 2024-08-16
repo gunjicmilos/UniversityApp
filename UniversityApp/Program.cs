@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using UniversityManagament.Data;
 using UniversityManagament.Models;
 using UniversityManagament.Services;
+using UniversityManagament.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,8 +17,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//string connectionString = "Server=127.0.0.1,1433;Database=UniversityDB;User Id=sa;Password=Nemamsifru.99;TrustServerCertificate=True;";
-string connectionString = "Server=localhost; Database=UniversityManagament; Trusted_Connection=True;";
+string connectionString = "Server=127.0.0.1,1433;Database=UniversityDB;User Id=sa;Password=Nemamsifru.99;TrustServerCertificate=True;";
+//string connectionString = "Server=localhost; Database=UniversityManagament; Trusted_Connection=True;";
 
 builder.Services.AddControllers().AddJsonOptions(options =>
 {
@@ -62,16 +63,16 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("ProfessorPolicy", policy => policy.RequireRole("Professor"));
 });
 
-builder.Services.AddScoped<DepartmentService>();
-builder.Services.AddScoped<ExamPeriodService>();
-builder.Services.AddScoped<ExamService>();
-builder.Services.AddScoped<FacultyService>();
-builder.Services.AddScoped<SubjectService>();
-builder.Services.AddScoped<UserService>();
-builder.Services.AddScoped<FinanceService>();
-builder.Services.AddScoped<TokenService>();
-builder.Services.AddScoped<TransactionService>();
-builder.Services.AddScoped<UniversityService>();
+builder.Services.AddScoped<IDepartmentService, DepartmentService>();
+builder.Services.AddScoped<IExamPeriodService, ExamPeriodService>();
+builder.Services.AddScoped<IExamService, ExamService>();
+builder.Services.AddScoped<IFacultyService, FacultyService>();
+builder.Services.AddScoped<ISubjectService, SubjectService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IFinanceService, FinanceService>();
+builder.Services.AddScoped<ITokenService,TokenService>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
+builder.Services.AddScoped<IUniversityService, UniversityService>();
 
 
 

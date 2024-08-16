@@ -3,10 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using UniversityManagament.Data;
 using UniversityManagament.Models;
 using UniversityManagament.Models.Dto;
+using UniversityManagament.Services.Interfaces;
 
 namespace UniversityManagament.Services;
 
-public class ExamPeriodService
+public class ExamPeriodService : IExamPeriodService
 {
     private readonly DataContext _context;
 
@@ -69,8 +70,8 @@ public class ExamPeriodService
 
             return examPeriodDto;
         }
-
-        public async Task<ActionResult<ExamPeriod>> UpdateExamPerion(Guid id, CreateExamPeriodDto updateExamPeriodDto)
+    
+        public async Task<ActionResult<ExamPeriod>> UpdateExamPeriod(Guid id, CreateExamPeriodDto updateExamPeriodDto)
         {
             var examPeriod = await _context.ExamPeriods.FindAsync(id);
             
@@ -85,7 +86,7 @@ public class ExamPeriodService
             return examPeriod;
         }
 
-        public async Task<ActionResult<ExamPeriod>> DeleteExamPerion(Guid id)
+        public async Task<ActionResult<ExamPeriod>> DeleteExamPeriod(Guid id)
         {
             var examPeriod = await _context.ExamPeriods.FindAsync(id);
 

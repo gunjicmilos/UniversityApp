@@ -3,11 +3,12 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using UniversityManagament.Models;
+using UniversityManagament.Services.Interfaces;
 
 namespace UniversityManagament.Services
 {
 
-    public class TokenService
+    public class TokenService : ITokenService
     {
         private readonly JwtSettings _jwtSettings;
 

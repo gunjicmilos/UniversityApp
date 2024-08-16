@@ -48,7 +48,7 @@ namespace UniversityManagament.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateExamPerion(Guid id, CreateExamPeriodDto updateExamPeriodDto)
         {
-            var examPeriod = await _examPeriodService.UpdateExamPerion(id, updateExamPeriodDto);
+            var examPeriod = await _examPeriodService.UpdateExamPeriod(id, updateExamPeriodDto);
 
             if (examPeriod == null)
             {
@@ -61,7 +61,7 @@ namespace UniversityManagament.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteExamPerion(Guid id)
         {
-            var examPeriod = await _examPeriodService.DeleteExamPerion(id);
+            var examPeriod = await _examPeriodService.DeleteExamPeriod(id);
 
             if (examPeriod == null)
             {

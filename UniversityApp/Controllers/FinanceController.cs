@@ -7,7 +7,7 @@ namespace UniversityManagament.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-//[Authorize]
+[Authorize]
 public class FinanceController : ControllerBase
 {
     private readonly FinanceService _financeService;
@@ -17,7 +17,7 @@ public class FinanceController : ControllerBase
         _financeService = financeService;
     }
 
-    //[Authorize(Policy = "AdminPolicy")]
+    [Authorize(Policy = "AdminPolicy")]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<FinanceReadDto>>> GetAllFinances()
     {
