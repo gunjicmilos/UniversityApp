@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using UniversityApp.Repository.IRepository;
-using UniversityManagament.Data;
 using UniversityManagament.Models;
 using UniversityManagament.Models.Dto;
 using UniversityManagament.Services.Interfaces;
@@ -9,16 +8,14 @@ namespace UniversityManagament.Services;
 
 public class DepartmentService : IDepartmentService
 {
-    private readonly DataContext _context;
     private readonly IDepartmentsRepository _departmentsRepository;
 
-    public DepartmentService(DataContext context, IDepartmentsRepository departmentsRepository)
+    public DepartmentService(IDepartmentsRepository departmentsRepository)
     {
-        _context = context;
         _departmentsRepository = departmentsRepository;
     }
 
-    public async Task<ActionResult<IEnumerable<DepartmentDto>>> GetDepartmentsAsync([FromQuery] string? name = null,
+    public async Task<List<DepartmentDto>> GetDepartmentsAsync([FromQuery] string? name = null,
         [FromQuery] Guid? facultyId = null)
     {
         var departments = await _departmentsRepository.GetDepartmentsAsync();
@@ -36,13 +33,13 @@ public class DepartmentService : IDepartmentService
         return departments;
     }
 
-    public async Task<ActionResult<DepartmentDto>> GetDepartmentAsync(Guid id)
+    public async Task<DepartmentDto> GetDepartmentAsync(Guid id)
     {
         var department = await _departmentsRepository.GetDepartmentByIdAsync(id);
         return department;
     }
     
-    public async Task<ActionResult<DepartmentDto>> CreateDepartmentAsync(CreateDepartmentsDto createDepartmentsDto)
+    public async Task<DepartmentDto> CreateDepartmentAsync(CreateDepartmentsDto createDepartmentsDto)
     {
         var department = new Department()
         {

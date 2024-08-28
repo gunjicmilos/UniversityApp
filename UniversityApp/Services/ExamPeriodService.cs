@@ -10,16 +10,14 @@ namespace UniversityManagament.Services;
 
 public class ExamPeriodService : IExamPeriodService
 {
-    private readonly DataContext _context;
     private readonly IExamPeriodRepository _periodRepository;
 
-    public ExamPeriodService(DataContext context, IExamPeriodRepository periodRepository)
+    public ExamPeriodService(IExamPeriodRepository periodRepository)
     {
-        _context = context;
         _periodRepository = periodRepository;
     }
 
-    public async Task<IEnumerable<ExamPeriodDto>> GetExamPeriodsAsync()
+    public async Task<List<ExamPeriodDto>> GetExamPeriodsAsync()
     {
         return await _periodRepository.GetAllExamPeriodsAsync();
     }
@@ -29,7 +27,7 @@ public class ExamPeriodService : IExamPeriodService
         return await _periodRepository.GetExamPeriodByIdAsync(id);
     }
 
-        public async Task<ActionResult<ExamPeriodDto>> CreateExamPeriod(CreateExamPeriodDto createExamPeriodDto)
+        public async Task<ExamPeriodDto> CreateExamPeriod(CreateExamPeriodDto createExamPeriodDto)
         {
             var examPeriod = new ExamPeriod
             {
@@ -52,10 +50,10 @@ public class ExamPeriodService : IExamPeriodService
 
             return examPeriodDto;
         }
-    
-        public async Task<ActionResult<ExamPeriod>> UpdateExamPeriod(Guid id, CreateExamPeriodDto updateExamPeriodDto)
+        
+        public async Task<ExamPeriod> UpdateExamPeriod(Guid id, CreateExamPeriodDto updateExamPeriodDto)
         {
-            var examPeriod = await _context.ExamPeriods.FindAsync(id);
+            var examPeriod = await _periodRepository.GetExamPeriodByIdFromDbAsync(id);
             
             examPeriod.Name = updateExamPeriodDto.Name;
             examPeriod.StartDate = updateExamPeriodDto.StartData;
@@ -67,9 +65,9 @@ public class ExamPeriodService : IExamPeriodService
             return examPeriod;
         }
 
-        public async Task<ActionResult<ExamPeriod>> DeleteExamPeriod(Guid id)
+        public async Task<ExamPeriod> DeleteExamPeriod(Guid id)
         {
-            var examPeriod = await _context.ExamPeriods.FindAsync(id);
+            var examPeriod = await _periodRepository.GetExamPeriodByIdFromDbAsync(id);
 
             await _periodRepository.DeleteExamPeriodAsync(examPeriod);
 

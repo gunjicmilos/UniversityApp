@@ -6,8 +6,8 @@ namespace UniversityManagament.Services.Interfaces;
 
 public interface ITransactionService
 {
-    Task<ActionResult<IEnumerable<BankTransaction>>> GetTransactions();
-    Task<ActionResult<BankTransaction>> GetTransaction(int id);
-    Task<ActionResult<BankTransaction>> PostTransaction(BankTransactionDto transaction);
+    Task<List<BankTransaction>> GetTransactions();
+    Task<BankTransaction> GetTransaction(Guid id);
+    Task<BankTransaction> PostTransaction(BankTransactionDto transaction);
     Task<BankTransaction> DeleteTransaction(Guid id);
 }

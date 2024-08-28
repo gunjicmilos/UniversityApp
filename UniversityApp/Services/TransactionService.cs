@@ -1,6 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using UniversityManagament.Data;
+using UniversityApp.Repository.IRepository;
 using UniversityManagament.Models;
 using UniversityManagament.Models.Dto;
 using UniversityManagament.Services.Interfaces;
@@ -9,25 +7,27 @@ namespace UniversityManagament.Services;
 
 public class TransactionService : ITransactionService
 {
-    private readonly DataContext _context; 
+    private readonly ITransactionRepository _transactionRepository;
+    private readonly IFinanceRepository _financeRepository;
 
-    public TransactionService(DataContext context)
+    public TransactionService(ITransactionRepository transactionRepository, IFinanceRepository financeRepository)
     {
-        _context = context;
+        _transactionRepository = transactionRepository;
+        _financeRepository = financeRepository;
     }
 
-    public async Task<ActionResult<IEnumerable<BankTransaction>>> GetTransactions()
+    public async Task<List<BankTransaction>> GetTransactions()
     {
-        return await _context.BankTransactions.ToListAsync();
+        return await _transactionRepository.GetTransactionsAsync();
     }
     
-    public async Task<ActionResult<BankTransaction>> GetTransaction(int id)
+    public async Task<BankTransaction> GetTransaction(Guid id)
     {
-        var transaction = await _context.BankTransactions.FindAsync(id);
+        var transaction = await _transactionRepository.GetTransaction(id);
         return transaction;
     }
     
-    public async Task<ActionResult<BankTransaction>> PostTransaction(BankTransactionDto transaction)
+    public async Task<BankTransaction> PostTransaction(BankTransactionDto transaction)
     {
         var transactionToAdd = new BankTransaction()
         {
@@ -37,29 +37,26 @@ public class TransactionService : ITransactionService
             Date = transaction.Date,
             Type = transaction.Type
         };
-        
-        
-        
-        _context.BankTransactions.Add(transactionToAdd);
-        await _context.SaveChangesAsync();
+
+        _transactionRepository.CreateTransaction(transactionToAdd);
 
         // Update Finance amount based on transaction type
         if (transaction.Type == TransactionType.Income)
         {
-            var finance = await _context.Finances.FindAsync(transaction.FinanceId);
+            var finance = await _financeRepository.GetFinanceAsync(transaction.FinanceId);
             if (finance != null)
             {
                 finance.Amount += transaction.Amount;
-                await _context.SaveChangesAsync();
+                await _financeRepository.UpdateFinance(finance);
             }
         }
         else if (transaction.Type == TransactionType.Expense)
         {
-            var finance = await _context.Finances.FindAsync(transaction.FinanceId);
+            var finance = await _financeRepository.GetFinanceAsync(transaction.FinanceId);
             if (finance != null)
             {
                 finance.Amount -= transaction.Amount;
-                await _context.SaveChangesAsync();
+                await _financeRepository.UpdateFinance(finance);
             }
         }
 
@@ -69,17 +66,16 @@ public class TransactionService : ITransactionService
 
     public async Task<BankTransaction> DeleteTransaction(Guid id)
     {
-        var transaction = await _context.BankTransactions.FindAsync(id);
- 
-        _context.BankTransactions.Remove(transaction);
-        await _context.SaveChangesAsync();
+        var transaction = await _transactionRepository.GetTransaction(id);
+
+        await _transactionRepository.DeleteTransaction(transaction);
 
         return transaction;
     }
 
-    private bool TransactionExists(int id)
+    private bool TransactionExists(Guid id)
     {
-        var transaction = _context.BankTransactions.FindAsync(id);
+        var transaction = _transactionRepository.GetTransaction(id);
         if (transaction != null)
         {
             return true;

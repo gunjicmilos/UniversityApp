@@ -19,7 +19,7 @@ namespace UniversityManagament.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<FacultyDto>>> GetFaculties([FromQuery] string? name = null, [FromQuery] string? location = null, [FromQuery] Guid? UniversityId = null)
         {
-            var faculties = await _facultyService.GetFaculties();
+            var faculties = await _facultyService.GetFaculties(name, location, UniversityId);
             return Ok(faculties);
         }
 

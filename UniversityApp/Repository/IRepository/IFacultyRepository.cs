@@ -7,6 +7,7 @@ public interface IFacultyRepository
 {
     Task<List<FacultyDto>> GetAllFacultiesAsync();
     Task<FacultyDto> GetFacultyByIdAsync(Guid id);
+    Task<Faculty> GetFacultyByIdFromDbAsync(Guid id);
     Task AddFacultyAsync(Faculty faculty);
     Task UpdateFacultyAsync(Faculty faculty);
     Task DeleteFacultyAsync(Guid id);

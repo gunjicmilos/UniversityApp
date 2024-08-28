@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using UniversityApp.Repository.IRepository;
 using UniversityManagament.Data;
 using UniversityManagament.Models;
 using UniversityManagament.Models.Dto;
@@ -8,29 +9,21 @@ namespace UniversityManagament.Services;
 
 public class FinanceService : IFinanceService
 {
-    private readonly DataContext _context;
+    private readonly IFinanceRepository _financeRepository;
 
-        public FinanceService(DataContext context)
+        public FinanceService(IFinanceRepository financeRepository)
         {
-            _context = context;
+            _financeRepository = financeRepository;
         }
 
-        public async Task<IEnumerable<FinanceReadDto>> GetAllFinancesAsync()
+        public async Task<List<FinanceReadDto>> GetAllFinancesAsync()
         {
-            return await _context.Finances
-                .Select(f => new FinanceReadDto
-                {
-                    Id = f.Id,
-                    FacultyId = f.FacultyId,
-                    Amount = f.Amount,
-                    Description = f.Description,
-                    Date = f.Date
-                }).ToListAsync();
+            return await _financeRepository.GetAllFinancesAsync();
         }
 
         public async Task<FinanceReadDto> GetFinanceByIdAsync(Guid id)
         {
-            var finance = await _context.Finances.FindAsync(id);
+            var finance = await _financeRepository.GetFinanceAsync(id);
             if (finance == null) return null;
 
             return new FinanceReadDto
@@ -54,8 +47,7 @@ public class FinanceService : IFinanceService
                 Date = financeCreateDto.Date
             };
 
-            _context.Finances.Add(finance);
-            await _context.SaveChangesAsync();
+            await _financeRepository.CreateFinance(finance);
 
             return new FinanceReadDto
             {
@@ -69,7 +61,7 @@ public class FinanceService : IFinanceService
 
         public async Task<bool> UpdateFinanceAsync(Guid id, FinanceCreateDto financeUpdateDto)
         {
-            var finance = await _context.Finances.FindAsync(id);
+            var finance = await _financeRepository.GetFinanceAsync(id);
             if (finance == null) return false;
 
             finance.FacultyId = financeUpdateDto.FacultyId;
@@ -77,19 +69,17 @@ public class FinanceService : IFinanceService
             finance.Description = financeUpdateDto.Description;
             finance.Date = financeUpdateDto.Date;
 
-            _context.Finances.Update(finance);
-            await _context.SaveChangesAsync();
+            await _financeRepository.UpdateFinance(finance);
 
             return true;
         }
 
         public async Task<bool> DeleteFinanceAsync(Guid id)
         {
-            var finance = await _context.Finances.FindAsync(id);
+            var finance = await _financeRepository.GetFinanceAsync(id);
             if (finance == null) return false;
 
-            _context.Finances.Remove(finance);
-            await _context.SaveChangesAsync();
+            await _financeRepository.DeleteFinance(finance);
 
             return true;
         }

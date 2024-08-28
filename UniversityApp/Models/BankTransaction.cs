@@ -8,6 +8,7 @@ public class BankTransaction
     [Key]
     public Guid Id { get; set; }
     public string Description { get; set; }
+    public string? Payer { get; set; }
     public Guid FinanceId { get; set; }
     [Column(TypeName = "decimal(18, 2)")]
     public decimal Amount { get; set; }

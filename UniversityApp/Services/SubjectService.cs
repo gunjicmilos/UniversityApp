@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using UniversityManagament.Data;
+using UniversityApp.Repository.IRepository;
 using UniversityManagament.Models;
 using UniversityManagament.Models.Dto;
 using UniversityManagament.Services.Interfaces;
@@ -9,24 +8,18 @@ namespace UniversityManagament.Services;
 
 public class SubjectService : ISubjectService
 {
-    private readonly DataContext _context;
+    private readonly ISubjectRepository _subjectRepository;
+    private readonly IUserRepository _userRepository;
 
-    public SubjectService(DataContext context)
+    public SubjectService(ISubjectRepository subjectRepository, IUserRepository userRepository)
     {
-        _context = context;
+        _subjectRepository = subjectRepository;
+        _userRepository = userRepository;
     }
     
-    public async Task<ActionResult<IEnumerable<SubjectDto>>> GetSubjects([FromQuery] string? name = null, [FromQuery] Guid? departmentId = null)
-        {
-            var subjects = await _context.Subjects
-                .Include(s => s.UserSubjects)
-                .Select(s => new SubjectDto
-                {
-                    Id = s.Id,
-                    Name = s.Name,
-                    DepartmentId = s.DepartmentId,
-                    UserIds = s.UserSubjects.Select(us => us.UserId).ToList()
-                }).ToListAsync();
+    public async Task<IEnumerable<SubjectDto>> GetSubjects([FromQuery] string? name = null, [FromQuery] Guid? departmentId = null)
+    {
+        var subjects = await _subjectRepository.GetAllSubjectsAsync();
 
             if (!string.IsNullOrWhiteSpace(name))
             {
@@ -41,23 +34,14 @@ public class SubjectService : ISubjectService
             return subjects;
         }
 
-        public async Task<ActionResult<SubjectDto>> GetSubjectsById(Guid id)
+        public async Task<SubjectDto> GetSubjectsById(Guid id)
         {
-            var subjects = await _context.Subjects
-                .Include(s => s.UserSubjects)
-                .Select(s => new SubjectDto
-                {
-                    Id = s.Id,
-                    Name = s.Name,
-                    DepartmentId = s.DepartmentId,
-                    UserIds = s.UserSubjects.Select(us => us.UserId).ToList()
-                })
-                .FirstOrDefaultAsync(s => s.Id == id);
+            var subjects = await _subjectRepository.GetSubjectAsync(id);
 
             return subjects;
         }
 
-        public async Task<ActionResult<SubjectDto>> CreateSubject(CreateSubjectDto createSubjectDto)
+        public async Task<SubjectDto> CreateSubject(CreateSubjectDto createSubjectDto)
         {
             var subject = new Subject
             {
@@ -67,12 +51,11 @@ public class SubjectService : ISubjectService
 
             if (createSubjectDto.UsersIds != null && createSubjectDto.UsersIds.Any())
             {
-                var users = await _context.Users.Where(u => createSubjectDto.UsersIds.Contains(u.Id)).ToListAsync();
+                var users = await _userRepository.GetUsersByUserIds(createSubjectDto);
                 subject.UserSubjects.AddRange(users.Select(u => new UserSubject { UserId = u.Id, SubjectId = subject.Id }));
             }
 
-            _context.Subjects.Add(subject);
-            await _context.SaveChangesAsync();
+            await _subjectRepository.CreateSubject(subject);
 
             var subjectDto = new SubjectDto
             {
@@ -85,9 +68,9 @@ public class SubjectService : ISubjectService
             return subjectDto;
         }
 
-        public async Task<ActionResult<Subject>> UpdateSubject(Guid id, CreateSubjectDto updateSubjectDto)
+        public async Task<Subject> UpdateSubject(Guid id, CreateSubjectDto updateSubjectDto)
         {
-            var subject = await _context.Subjects.Include(s => s.UserSubjects).FirstOrDefaultAsync(s => s.Id == id);
+            var subject = await _subjectRepository.GetSubjectFromDbAsync(id);
 
             subject.Name = updateSubjectDto.Name; ;
             subject.DepartmentId = updateSubjectDto.DepartmentId;
@@ -95,22 +78,20 @@ public class SubjectService : ISubjectService
             subject.UserSubjects.Clear();
             if (updateSubjectDto.UsersIds != null && updateSubjectDto.UsersIds.Any())
             {
-                var users = await _context.Users.Where(u => updateSubjectDto.UsersIds.Contains(u.Id)).ToListAsync();
+                var users = await _userRepository.GetUsersByUserIds(updateSubjectDto);
                 subject.UserSubjects.AddRange(users.Select(u => new UserSubject { UserId = u.Id, SubjectId = subject.Id }));
             }
-            
-            _context.Entry(subject).State = EntityState.Modified;
-            await _context.SaveChangesAsync();  
+
+            await _subjectRepository.UpdateSubject(subject); 
 
             return subject;
         }
 
-        public async Task<ActionResult<Subject>> DeleteSubject(Guid id)
+        public async Task<Subject> DeleteSubject(Guid id)
         {
-            var subject = await _context.Subjects.Include(s => s.UserSubjects).FirstOrDefaultAsync(s => s.Id == id);
+            var subject = await _subjectRepository.GetSubjectFromDbAsync(id);
 
-            _context.Subjects.Remove(subject);
-            await _context.SaveChangesAsync();
+            await _subjectRepository.DeleteSubject(subject);
 
             return subject;
         }

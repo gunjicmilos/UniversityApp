@@ -15,7 +15,7 @@ public class ExamPeriodRepository : IExamPeriodRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<ExamPeriodDto>> GetAllExamPeriodsAsync()
+    public async Task<List<ExamPeriodDto>> GetAllExamPeriodsAsync()
     {
         return await _context.ExamPeriods
             .Select(ep => new ExamPeriodDto
@@ -38,6 +38,20 @@ public class ExamPeriodRepository : IExamPeriodRepository
                 Name = ep.Name,
                 StartDate = ep.StartDate,
                 EndData = ep.EndDate, // Proveri da li je ovo tačan naziv
+                FacultyId = ep.FacultyId,
+            })
+            .FirstOrDefaultAsync();
+    }
+    
+    public async Task<ExamPeriod> GetExamPeriodByIdFromDbAsync(Guid id)
+    {
+        return await _context.ExamPeriods
+            .Where(ep => ep.Id == id)
+            .Select(ep => new ExamPeriod
+            {
+                Id = ep.Id,
+                Name = ep.Name,
+                StartDate = ep.StartDate,
                 FacultyId = ep.FacultyId,
             })
             .FirstOrDefaultAsync();

@@ -6,9 +6,10 @@ namespace UniversityManagament.Services.Interfaces;
 
 public interface IUniversityService
 {
-    Task<ActionResult<IEnumerable<UniversityDto>>> GetUniversities(string? name = null, string? location = null);
-    Task<ActionResult<UniversityDto>> GetUniversitiy(Guid id);
-    Task<ActionResult<UniversityDto>> CreateUniversity(CreateUniversityDto createUniversityDto);
+    Task<List<UniversityDto>> GetUniversities(string? name = null, string? location = null);
+    Task<UniversityDto> GetUniversitiy(Guid id);
+    Task<UniversityDto> CreateUniversity(CreateUniversityDto createUniversityDto);
     Task<University> UpdateUniversitiy(Guid id, CreateUniversityDto updateUniversityDto);
     Task<University> DeleteUniversitiy(Guid id);
+    Task<bool> UniversityExists(string name);
 }

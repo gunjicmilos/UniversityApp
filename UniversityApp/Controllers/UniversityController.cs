@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using UniversityManagament.Models.Dto;
-using UniversityManagament.Services;
 using UniversityManagament.Services.Interfaces;
 
 namespace UniversityManagament.Controllers
@@ -16,10 +15,9 @@ namespace UniversityManagament.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UniversityDto>>> GetUniversities([FromQuery] string? name = null, [FromQuery] string? location = null)
+        public async Task<ActionResult<List<UniversityDto>>> GetUniversities([FromQuery] string? name = null, [FromQuery] string? location = null)
         {
-            var universities = await _universityService.GetUniversities();
-
+            var universities = await _universityService.GetUniversities(name, location);
             return Ok(universities);
         }
 
@@ -39,8 +37,15 @@ namespace UniversityManagament.Controllers
         [HttpPost]
         public async Task<ActionResult<UniversityDto>> CreateUniversity(CreateUniversityDto createUniversityDto)
         {
-            var university = _universityService.CreateUniversity(createUniversityDto);
-            return Ok(university);
+            if (!await _universityService.UniversityExists(createUniversityDto.Name))
+            {
+                var university = await _universityService.CreateUniversity(createUniversityDto);
+                return Ok(university);
+            }
+            else
+            {
+                return BadRequest($"University {createUniversityDto.Name} already exists");
+            }
         }
 
         [HttpPut("{id}")]

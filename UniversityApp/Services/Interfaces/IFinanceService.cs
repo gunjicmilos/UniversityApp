@@ -4,7 +4,7 @@ namespace UniversityManagament.Services.Interfaces;
 
 public interface IFinanceService
 {
-    Task<IEnumerable<FinanceReadDto>> GetAllFinancesAsync();
+    Task<List<FinanceReadDto>> GetAllFinancesAsync();
     Task<FinanceReadDto> GetFinanceByIdAsync(Guid id);
     Task<FinanceReadDto> CreateFinanceAsync(FinanceCreateDto financeCreateDto);
     Task<bool> UpdateFinanceAsync(Guid id, FinanceCreateDto financeUpdateDto);

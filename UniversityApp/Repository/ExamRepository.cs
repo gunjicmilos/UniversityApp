@@ -51,6 +51,28 @@ public class ExamRepository : IExamRepository
         return exam;
     }
 
+    public async Task<Exam> GetExamByIdFromDb(Guid id)
+    {
+        return await _context.Exams.Include(e => e.UserExams).FirstOrDefaultAsync(e => e.Id == id);
+    }
+
+    public async Task<Exam> GetExamByIdFromDbAsync(Guid id)
+    {
+        var exam = await _context.Exams
+            .Include(e => e.UserExams)
+            .Select(e => new Exam
+            {
+                Id = e.Id,
+                Name = e.Name,
+                Date = e.Date,
+                SubjectId = e.SubjectId,
+                ExamPeriodId = e.ExamPeriodId,
+            })
+            .FirstOrDefaultAsync(e => e.Id == id);
+            
+        return exam;
+    }
+
     public async Task CreateExamAsync(Exam exam)
     {
         _context.Exams.Add(exam);

@@ -21,14 +21,14 @@ namespace UniversityManagament.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers([FromQuery] string? name = null, [FromQuery] string? email = null, [FromQuery] Guid? facultyId = null)
+        public async Task<ActionResult<List<UserDto>>> GetUsers([FromQuery] string? name = null, [FromQuery] string? email = null, [FromQuery] Guid? facultyId = null)
         {
             var users = await _userService.GetUsersAsync(name, email, facultyId);
             return Ok(users);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers(Guid id)
+        public async Task<ActionResult<List<UserDto>>> GetUser(Guid id)
         {
             var user = await _userService.GetUserAsync(id);
 

@@ -60,6 +60,15 @@ public class FacultyRepository : IFacultyRepository
         return faculties;
     }
     
+    public async Task<Faculty> GetFacultyByIdFromDbAsync(Guid id)
+    {
+        var faculties = await _context.Faculties
+            .Include(f => f.UserFaculties)
+            .FirstOrDefaultAsync(f => f.Id == id);
+
+        return faculties;
+    }
+    
     public async Task AddFacultyAsync(Faculty faculty)
     {
         _context.Faculties.Add(faculty);
