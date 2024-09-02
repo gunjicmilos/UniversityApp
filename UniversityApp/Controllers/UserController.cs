@@ -61,7 +61,6 @@ namespace UniversityManagament.Controllers
             {
                 return NotFound($"User with id : {id} does not exists");
             }
-            
             return NoContent();
         }
 

@@ -26,6 +26,7 @@ public class UserRepository : IUserRepository
                 Name = u.Name,
                 Email = u.Email,
                 Role = u.Role,
+                Index = u.Index,
                 Faculties = u.UserFaculties.Select(uf => new FacultyDto
                 {
                     Id = uf.Faculty.Id,
@@ -55,7 +56,8 @@ public class UserRepository : IUserRepository
                 Id = u.Id,
                 Name = u.Name,
                 Email = u.Email,
-                Role = u.Role
+                Role = u.Role,
+                Index = u.Index,
             })
             .FirstOrDefaultAsync(u => u.Id == id);
     }
@@ -73,7 +75,8 @@ public class UserRepository : IUserRepository
                 Id = u.Id,
                 Name = u.Name,
                 Email = u.Email,
-                Role = u.Role
+                Role = u.Role,
+                Index = u.Index,
             })
             .FirstOrDefaultAsync(u => u.Id == id);
     }

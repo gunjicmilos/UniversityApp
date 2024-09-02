@@ -2,7 +2,6 @@
 using UniversityApp.Repository.IRepository;
 using UniversityManagament.Models;
 using UniversityManagament.Models.Dto;
-using UniversityManagament.Services;
 using UniversityManagament.Services.Interfaces;
 
 namespace UniversityManagament.Controllers
@@ -76,7 +75,7 @@ namespace UniversityManagament.Controllers
             var department = await _departmentService.UpdateDepartmentAsync(id, updateDepartmentsDto);
             if (department == null)
             {
-                return NotFound();
+                return NotFound($"Department with id : {id} already exists on faculty");
             }
 
             return NoContent();

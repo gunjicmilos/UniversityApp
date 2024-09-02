@@ -113,7 +113,7 @@ namespace UniversityManagament.Controllers
 
             if (exam == null)
             {
-                return NotFound();
+                return NotFound($"Exam with id : {Id} not found");
             }
             
             return NoContent();
@@ -126,7 +126,7 @@ namespace UniversityManagament.Controllers
 
             if (exam == null)
             {
-                return NotFound();
+                return NotFound($"Exam with id : {id} not found");
             }
 
             return NoContent();

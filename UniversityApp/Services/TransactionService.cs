@@ -40,7 +40,6 @@ public class TransactionService : ITransactionService
 
         await _transactionRepository.CreateTransaction(transactionToAdd);
 
-        // Update Finance amount based on transaction type
         if (transaction.Type == TransactionType.Income)
         {
             var finance = await _financeRepository.GetFinanceAsync(transaction.FinanceId);

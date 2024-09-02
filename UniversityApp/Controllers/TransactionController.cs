@@ -1,9 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using UniversityManagament.Data;
 using UniversityManagament.Models;
 using UniversityManagament.Models.Dto;
-using UniversityManagament.Services;
 using UniversityManagament.Services.Interfaces;
 
 namespace UniversityManagament.Controllers;
@@ -21,24 +18,19 @@ public class TransactionController : ControllerBase
         _financeService = financeService;
     }
 
-    // GET: api/transaction
     [HttpGet]
     public async Task<ActionResult<IEnumerable<BankTransaction>>> GetTransactions()
     {
         return await _transactionService.GetTransactions();
     }
 
-    // GET: api/transaction/5
     [HttpGet("{id}")]
     public async Task<ActionResult<BankTransaction>> GetTransaction(Guid id)
     {
         var transaction = await _transactionService.DeleteTransaction(id);
-
         if (transaction == null)
-        {
             return NotFound($"Transaction with id : {id} not found");
-        }
-
+        
         return transaction;
     }
 
@@ -59,10 +51,7 @@ public class TransactionController : ControllerBase
     {
         var transaction = await _transactionService.DeleteTransaction(id);
         if (transaction == null)
-        {
             return NotFound($"Transaction with id : {id} not found");
-        }
-
         return NoContent();
     }
 }

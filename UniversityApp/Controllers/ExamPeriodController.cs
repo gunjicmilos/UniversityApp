@@ -22,7 +22,6 @@ namespace UniversityManagament.Controllers
         public async Task<ActionResult<IEnumerable<ExamPeriodDto>>> GetExamPeriods()
         {
             var examPeriods = await _examPeriodService.GetExamPeriodsAsync();
-
             return Ok(examPeriods);
         }
 

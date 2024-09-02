@@ -98,12 +98,11 @@ namespace UniversityManagament.Controllers
             }
 
             var subject = await _subjectService.UpdateSubject(id, updateSubjectDto);
-
+            
             if (subject == null)
             {
                 return NotFound($"Subject with id : {id} not found");
             }
-            
             return NoContent();
         }
 
@@ -114,9 +113,8 @@ namespace UniversityManagament.Controllers
 
             if (subject == null)
             {
-                return NotFound();
+                return NotFound($"Subject with id : {id} not found");
             }
-            
             return NoContent();
         }
     }
