@@ -59,7 +59,11 @@ public class ExamService : IExamService
     public async Task<Exam> UpdateExam(Guid Id, CreateExamDto updateExamDto)
     {
         var exam = await _examRepository.GetExamByIdFromDb(Id);
-            
+
+        if (exam == null)
+        {
+            return null;
+        }
         exam.Name = updateExamDto.Name;
         exam.Date = updateExamDto.Date;
         exam.SubjectId = updateExamDto.SubjectId;

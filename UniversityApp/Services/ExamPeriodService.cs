@@ -54,6 +54,10 @@ public class ExamPeriodService : IExamPeriodService
         public async Task<ExamPeriod> UpdateExamPeriod(Guid id, CreateExamPeriodDto updateExamPeriodDto)
         {
             var examPeriod = await _periodRepository.GetExamPeriodByIdFromDbAsync(id);
+            if (examPeriod == null)
+            {
+                return null;
+            }
             
             examPeriod.Name = updateExamPeriodDto.Name;
             examPeriod.StartDate = updateExamPeriodDto.StartData;

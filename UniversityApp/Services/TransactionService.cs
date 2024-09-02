@@ -38,7 +38,7 @@ public class TransactionService : ITransactionService
             Type = transaction.Type
         };
 
-        _transactionRepository.CreateTransaction(transactionToAdd);
+        await _transactionRepository.CreateTransaction(transactionToAdd);
 
         // Update Finance amount based on transaction type
         if (transaction.Type == TransactionType.Income)
@@ -67,6 +67,8 @@ public class TransactionService : ITransactionService
     public async Task<BankTransaction> DeleteTransaction(Guid id)
     {
         var transaction = await _transactionRepository.GetTransaction(id);
+        if (transaction == null)
+            return null;
 
         await _transactionRepository.DeleteTransaction(transaction);
 

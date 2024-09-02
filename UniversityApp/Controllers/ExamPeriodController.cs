@@ -9,12 +9,13 @@ namespace UniversityManagament.Controllers
     [Route("api/[controller]")]
     public class ExamPeriodController : ControllerBase
     {
-
+        private readonly IFacultyService _facultyService;
         private readonly IExamPeriodService _examPeriodService;
 
-        public ExamPeriodController(IExamPeriodService examPeriodService)
+        public ExamPeriodController(IExamPeriodService examPeriodService, IFacultyService facultyService)
         {
             _examPeriodService = examPeriodService;
+            _facultyService = facultyService;
         }
 
         [HttpGet]
@@ -32,7 +33,7 @@ namespace UniversityManagament.Controllers
 
             if (examPeriod == null)
             {
-                return NotFound();
+                return NotFound($"Exam period with id : {id} not found");
             }
 
             return Ok(examPeriod);
@@ -41,6 +42,19 @@ namespace UniversityManagament.Controllers
         [HttpPost]
         public async Task<ActionResult<ExamDto>> CreateExamPeriod(CreateExamPeriodDto createExamPeriodDto)
         {
+            
+            var faculty = await _facultyService.GetFaculty(createExamPeriodDto.FacultyId);
+            if (faculty == null)
+            {
+                return NotFound($"Faculty with id : {createExamPeriodDto.FacultyId} not found");
+            }
+            var examPeriods = await _examPeriodService.GetExamPeriodsAsync();
+            if (examPeriods.Any(ep =>
+                    ep.FacultyId == createExamPeriodDto.FacultyId && ep.Name == createExamPeriodDto.Name))
+            {
+                return BadRequest($"Exam period already exists on faculty");
+            }
+            
             var examPeriod = await _examPeriodService.CreateExamPeriod(createExamPeriodDto);
 
             return Ok(examPeriod);
@@ -49,11 +63,23 @@ namespace UniversityManagament.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateExamPerion(Guid id, CreateExamPeriodDto updateExamPeriodDto)
         {
+            var faculty = await _facultyService.GetFaculty(updateExamPeriodDto.FacultyId);
+            if (faculty == null)
+            {
+                return NotFound($"Faculty with id : {updateExamPeriodDto.FacultyId} not found");
+            }
+            var examPeriods = await _examPeriodService.GetExamPeriodsAsync();
+            if (examPeriods.Any(ep =>
+                    ep.FacultyId == updateExamPeriodDto.FacultyId && ep.Name == updateExamPeriodDto.Name))
+            {
+                return BadRequest($"Exam period already exists on faculty");
+            }
+            
             var examPeriod = await _examPeriodService.UpdateExamPeriod(id, updateExamPeriodDto);
 
             if (examPeriod == null)
             {
-                return NotFound();
+                return NotFound($"Exam period with id : {id} not found");
             }
             
             return NoContent();
@@ -66,7 +92,7 @@ namespace UniversityManagament.Controllers
 
             if (examPeriod == null)
             {
-                return NotFound();
+                return NotFound($"Exam period with id : {id} not found");
             }
             
             return NoContent();

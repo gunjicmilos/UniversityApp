@@ -15,7 +15,7 @@ public class DepartmentService : IDepartmentService
         _departmentsRepository = departmentsRepository;
     }
 
-    public async Task<List<DepartmentDto>> GetDepartmentsAsync([FromQuery] string? name = null,
+    public async Task<List<Department>> GetDepartmentsAsync([FromQuery] string? name = null,
         [FromQuery] Guid? facultyId = null)
     {
         var departments = await _departmentsRepository.GetDepartmentsAsync();
@@ -62,14 +62,14 @@ public class DepartmentService : IDepartmentService
     {
         return await _departmentsRepository.UpdateDepartmentAsync(id, updateDepartmentDto);
     }
-
-    public Task DeleteDepartmentAsync(Guid id)
-    {
-        throw new NotImplementedException();
-    }
-
+    
     public async Task DeleteDepartment(Guid id)
     {
         await _departmentsRepository.DeleteDepartmentAsync(id);
+    }
+
+    public async Task<bool> DepartmentExistsInFaculty(string name, Guid id)
+    {
+        return await _departmentsRepository.DepartmentExistsInFacultyAsync(name, id);
     }
 }

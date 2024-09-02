@@ -26,7 +26,6 @@ public class ExamRepository : IExamRepository
                 Date = e.Date,
                 SubjectId = e.SubjectId,
                 ExamPeriodId = e.ExamPeriodId,
-                UserIds = e.UserExams.Select(ue => ue.UserId).ToList()
             })
             .ToListAsync();
 
@@ -44,7 +43,6 @@ public class ExamRepository : IExamRepository
                 Date = e.Date,
                 SubjectId = e.SubjectId,
                 ExamPeriodId = e.ExamPeriodId,
-                UserIds = e.UserExams.Select(ue => ue.UserId).ToList()
             })
             .FirstOrDefaultAsync(e => e.Id == id);
             

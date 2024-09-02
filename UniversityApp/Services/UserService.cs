@@ -43,6 +43,11 @@ public class UserService : IUserService
             return user;
         }
 
+        public async Task<User> GetUserByEmailAsync(string email)
+        {
+            return await _userRepository.GetUserByEmailAsync(email);
+        }
+
         public async Task<UserDto> CreateUserAsync(CreateUserDto createUserDto)
         {
             var user = new User()
@@ -68,6 +73,11 @@ public class UserService : IUserService
         public async Task<User> UpdateUserAsync(Guid id, CreateUserDto updateUserDto)
         {
             var user = await _userRepository.GetUserFromDbAsync(id);
+
+            if (user == null)
+            {
+                return null;
+            }
             user.Name = updateUserDto.Name;
             user.Email = updateUserDto.Email;
             user.Password = updateUserDto.Password;
@@ -80,6 +90,11 @@ public class UserService : IUserService
         public async Task<User> DeleteUserAsync(Guid id)
         {
             var user = await _userRepository.GetUserFromDbAsync(id);
+            
+            if (user == null)
+            {
+                return null;
+            }
 
             await _userRepository.DeleteUserAsync(user);
 

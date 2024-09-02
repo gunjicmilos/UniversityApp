@@ -24,6 +24,10 @@ namespace UniversityManagament.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<UniversityDto>> GetUniversitiy(Guid id)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var universities = await _universityService.GetUniversitiy(id);
 
             if (universities == null)

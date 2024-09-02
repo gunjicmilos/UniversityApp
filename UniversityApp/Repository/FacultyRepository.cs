@@ -99,6 +99,10 @@ public class FacultyRepository : IFacultyRepository
         var user = await _context.Users
             .Include(u => u.UserFaculties)
             .FirstOrDefaultAsync(u => u.Id == addUserDto.UserId);
+        if (faculty == null || user == null)
+        {
+            return null;
+        }
 
         var userFaculty = new UserFaculty()
         {
@@ -125,5 +129,19 @@ public class FacultyRepository : IFacultyRepository
         await _context.SaveChangesAsync();
 
         return faculty;
+    }
+
+    public Task<Faculty> FacultyExistsAsinc(string name)
+    {
+        return _context.Faculties.FirstOrDefaultAsync(f => f.Name == name);
+    }
+
+    public async Task<bool> IsUserAddedToFacultyAsync(AssignUserDto assignUserDto)
+    {
+        var result = await _context.UserFaculties.Where
+            (uf => uf.UserId == assignUserDto.UserId && uf.FacultyId == assignUserDto.FacultyId).FirstOrDefaultAsync();
+        if (result == null)
+            return false;
+        return true;
     }
 }

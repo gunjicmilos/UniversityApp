@@ -13,4 +13,6 @@ public interface IFacultyService
     Task<Faculty> DeleteFaculty(Guid id);
     Task<User> AddUserToFaculty(AssignUserDto addUserDto);
     Task<Faculty> DeleteUserFromFaculty(AssignUserDto removeUserDto);
+    Task<bool> FacultyExists(string name);
+    Task<bool> IsUserAddedToFaculty(AssignUserDto assignUserDto);
 }

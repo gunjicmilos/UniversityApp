@@ -68,6 +68,11 @@ public class UniversityService : IUniversityService
         {
             var university = await _universityRepository.FindUniversityAsync(id);
 
+            if (university == null)
+            {
+                return null;
+            }
+
             university.Name = updateUniversityDto.Name;
             university.Location = updateUniversityDto.Location;
 
@@ -79,6 +84,11 @@ public class UniversityService : IUniversityService
         public async Task<University> DeleteUniversitiy(Guid id)
         {
             var university = await _universityRepository.FindUniversityAsync(id);
+            
+            if (university == null)
+            {
+                return null;
+            }
             
             await _universityRepository.DeleteUniversityAsync(university);
             return university;

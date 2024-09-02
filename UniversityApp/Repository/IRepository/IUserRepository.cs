@@ -9,6 +9,7 @@ public interface IUserRepository
     Task<List<User>> GetUsersByUserIds(CreateSubjectDto subjectDto);
     Task<List<User>> GetUsersByUserIds(CreateExamDto subjectDto);
     Task<UserDto> GetUserAsync(Guid id);
+    Task<User> GetUserByEmailAsync(string email);
     Task<User> GetUserFromDbAsync(Guid id);
     Task CreateUserAsync(User user);
     Task UpdateUserAsync(User user);

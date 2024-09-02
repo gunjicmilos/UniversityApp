@@ -13,4 +13,7 @@ public interface IFacultyRepository
     Task DeleteFacultyAsync(Guid id);
     Task<User> AddUserToFacultyAsync(AssignUserDto assignUserDto);
     Task<Faculty> RemoveUserFromFacultyAsync(AssignUserDto assignUserDto);
+    Task<Faculty> FacultyExistsAsinc(string name);
+    Task<bool> IsUserAddedToFacultyAsync(AssignUserDto assignUserDto);
+    
 }

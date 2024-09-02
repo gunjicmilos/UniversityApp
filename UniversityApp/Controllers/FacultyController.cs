@@ -30,7 +30,7 @@ namespace UniversityManagament.Controllers
 
             if (faculties == null)
             {
-                return NotFound();
+                return NotFound($"Faculty with id {id} not found");
             }
 
             return Ok(faculties);
@@ -39,9 +39,15 @@ namespace UniversityManagament.Controllers
         [HttpPost]
         public async Task<ActionResult<FacultyDto>> CreateFaculty(CreateFacultyDto createFacultyDto)
         {
-            var faculty = await _facultyService.CreateFaculty(createFacultyDto);
-
-            return Ok(faculty);
+            if (!await _facultyService.FacultyExists(createFacultyDto.Name))
+            {
+                var faculty = await _facultyService.CreateFaculty(createFacultyDto);
+                return Ok(faculty);
+            }
+            else
+            {
+                return BadRequest($"Faculty {createFacultyDto.Name} already exists");
+            }
         }
 
         [HttpPut("{id}")]
@@ -75,14 +81,17 @@ namespace UniversityManagament.Controllers
         [HttpPost("/addUser")]
         public async Task<ActionResult> AddUserToFaculty(AssignUserDto addUserDto)
         {
+            if (await _facultyService.IsUserAddedToFaculty(addUserDto))
+            {
+                return BadRequest("User is already added to faculty");
+            }
             var faculty = await _facultyService.AddUserToFaculty(addUserDto);
             if (faculty == null)
             {
-                return NotFound("Faculty doesnt not exists");
+                return NotFound("Faculty or User does not exists");
             }
-            
-            //return Ok($"User : {user.Name} is assigned to {faculty.Name} faculty");
-            return Ok(faculty);
+
+            return NoContent();
         }
 
         /*[HttpDelete("/removeUser")]

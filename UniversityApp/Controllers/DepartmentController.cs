@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using UniversityApp.Repository.IRepository;
 using UniversityManagament.Models;
 using UniversityManagament.Models.Dto;
 using UniversityManagament.Services;
@@ -11,10 +12,12 @@ namespace UniversityManagament.Controllers
     public class DepartmentController : ControllerBase
     {
         private readonly IDepartmentService _departmentService;
+        private readonly IFacultyRepository _facultyRepository;
 
-        public DepartmentController(IDepartmentService departmentService)
+        public DepartmentController(IDepartmentService departmentService, IFacultyRepository facultyRepository)
         {
             _departmentService = departmentService;
+            _facultyRepository = facultyRepository;
         }
 
         [HttpGet]
@@ -26,19 +29,28 @@ namespace UniversityManagament.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> GetDepartment(Guid id)
         {
-            var departments = await _departmentService.GetDepartmentAsync(id);
+            var department = await _departmentService.GetDepartmentAsync(id);
 
-            if (departments == null)
+            if (department == null)
             {
-                NotFound();
+                return NotFound($"Department with id {id} not found");
             }
 
-            return Ok(departments);
+            return Ok(department);
         }
 
         [HttpPost]
         public async Task<ActionResult> CreateDepartment(CreateDepartmentsDto createDepartmentsDto)
         {
+            var departmentExists =
+                await _departmentService.DepartmentExistsInFaculty(createDepartmentsDto.Name,
+                    createDepartmentsDto.FacultyId);
+
+            if (departmentExists)
+            {
+                return BadRequest($"Department with name : {createDepartmentsDto.Name} already exists on faculty");
+            }
+            
             var department = await _departmentService.CreateDepartmentAsync(createDepartmentsDto);
             return Ok(department);
         }
@@ -46,13 +58,28 @@ namespace UniversityManagament.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<Department>> UpdateDepartment(Guid id, CreateDepartmentsDto updateDepartmentsDto)
         {
+            var faculty = await _facultyRepository.GetFacultyByIdAsync(updateDepartmentsDto.FacultyId);
+            if (faculty == null)
+            {
+                return NotFound($"Faculty with id : {updateDepartmentsDto.FacultyId} does not exists");
+            }
+            
+            var departmentExists =
+                await _departmentService.DepartmentExistsInFaculty(updateDepartmentsDto.Name,
+                    updateDepartmentsDto.FacultyId);
+
+            if (departmentExists)
+            {
+                return BadRequest($"Department with name : {updateDepartmentsDto.Name} already exists on faculty");
+            }
+            
             var department = await _departmentService.UpdateDepartmentAsync(id, updateDepartmentsDto);
             if (department == null)
             {
                 return NotFound();
             }
 
-            return Ok(department);
+            return NoContent();
         }
 
         [HttpDelete("{id}")]

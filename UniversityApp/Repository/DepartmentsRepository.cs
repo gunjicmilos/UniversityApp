@@ -15,14 +15,15 @@ public class DepartmentsRepository : IDepartmentsRepository
         _context = context;
     }
     
-    public async Task<List<DepartmentDto>> GetDepartmentsAsync()
+    public async Task<List<Department>> GetDepartmentsAsync()
     {
         return await _context.Departments
-            .Select(d => new DepartmentDto
+            .Select(d => new Department
             {
                 Id = d.Id,
                 Name = d.Name,
-                FacultyId = d.FacultyId
+                FacultyId = d.FacultyId,
+                Subjects = d.Subjects
             })
             .ToListAsync();
     }
@@ -39,7 +40,18 @@ public class DepartmentsRepository : IDepartmentsRepository
             })
             .FirstOrDefaultAsync();
     }
-    
+
+    public async Task<bool> DepartmentExistsInFacultyAsync(string name, Guid id)
+    {
+        var result = await _context.Faculties
+            .FirstOrDefaultAsync(uf => uf.Id == id && uf.Departments.Any(d => d.Name == name));
+        if (result == null)
+        {
+            return false;
+        }
+        return true;
+    }
+
     public async Task AddDepartmentAsync(Department department)
     {
         _context.Departments.Add(department);

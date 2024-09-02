@@ -12,11 +12,13 @@ namespace UniversityManagament.Controllers;
 [Route("api/[controller]")]
 public class TransactionController : ControllerBase
 {
-    private readonly ITransactionService _transactionService; 
+    private readonly ITransactionService _transactionService;
+    private readonly IFinanceService _financeService;
 
-    public TransactionController(ITransactionService transactionService)
+    public TransactionController(ITransactionService transactionService, IFinanceService financeService)
     {
         _transactionService = transactionService;
+        _financeService = financeService;
     }
 
     // GET: api/transaction
@@ -34,7 +36,7 @@ public class TransactionController : ControllerBase
 
         if (transaction == null)
         {
-            return NotFound();
+            return NotFound($"Transaction with id : {id} not found");
         }
 
         return transaction;
@@ -43,20 +45,22 @@ public class TransactionController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<BankTransaction>> PostTransaction(BankTransactionDto transaction)
     {
+        if (await _financeService.GetFinanceByIdAsync(transaction.FinanceId) == null)
+            return NotFound($"Finance with id : {transaction.FinanceId} not found");
+        
         var transactionToAdd = await _transactionService.PostTransaction(transaction);
 
         return Ok(transactionToAdd);
     }
 
 
-    // DELETE: api/transaction/5
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteTransaction(Guid id)
     {
         var transaction = await _transactionService.DeleteTransaction(id);
         if (transaction == null)
         {
-            return NotFound();
+            return NotFound($"Transaction with id : {id} not found");
         }
 
         return NoContent();

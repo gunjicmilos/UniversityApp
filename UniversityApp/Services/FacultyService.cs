@@ -65,6 +65,11 @@ public class FacultyService : IFacultyService
         public async Task<Faculty> UpdateFaculty(Guid id, CreateFacultyDto updateFacultyDto)
         {
             var faculty = await _facultyRepository.GetFacultyByIdFromDbAsync(id);
+
+            if (faculty == null)
+            {
+                return null;
+            }
             
             faculty.Name = updateFacultyDto.Name;
             faculty.Location = updateFacultyDto.Location;
@@ -82,6 +87,11 @@ public class FacultyService : IFacultyService
         public async Task<Faculty> DeleteFaculty(Guid id)
         {
             var faculty = await _facultyRepository.GetFacultyByIdFromDbAsync(id);
+            
+            if (faculty == null)
+            {
+                return null;
+            }
 
             await _facultyRepository.DeleteFacultyAsync(id);
 
@@ -96,5 +106,20 @@ public class FacultyService : IFacultyService
         public async Task<Faculty> DeleteUserFromFaculty(AssignUserDto removeUserDto)
         {
             return await _facultyRepository.RemoveUserFromFacultyAsync(removeUserDto);
+        }
+
+        public async Task<bool> FacultyExists(string name)
+        {
+            var faculty = await _facultyRepository.FacultyExistsAsinc(name);
+            if (faculty != null)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public async Task<bool> IsUserAddedToFaculty(AssignUserDto assignUserDto)
+        {
+            return await _facultyRepository.IsUserAddedToFacultyAsync(assignUserDto);
         }
 }

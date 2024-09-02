@@ -34,7 +34,7 @@ namespace UniversityManagament.Controllers
 
             if (user == null)
             {
-                return NotFound();
+                return NotFound($"User with id : {id} does not exists");
             }
 
             return Ok(user);
@@ -43,8 +43,13 @@ namespace UniversityManagament.Controllers
         [HttpPost]
         public async Task<ActionResult<UserDto>> CreateUser(CreateUserDto createUserDto)
         {
-            var user = await _userService.CreateUserAsync(createUserDto);
-            return Ok(user);
+            var user = await _userService.GetUserByEmailAsync(createUserDto.Email);
+            if (user != null)
+            {
+                return NotFound($"User with email : {createUserDto.Email} already exists");
+            }
+            var result = await _userService.CreateUserAsync(createUserDto);
+            return Ok(result);
         }
 
         [HttpPut("{id}")]
@@ -54,7 +59,7 @@ namespace UniversityManagament.Controllers
 
             if(user == null)
             {
-                return NotFound("User doesnt exist");
+                return NotFound($"User with id : {id} does not exists");
             }
             
             return NoContent();
@@ -67,7 +72,7 @@ namespace UniversityManagament.Controllers
 
             if (user == null)
             {
-                return NotFound("User doesnt exsists");
+                return NotFound($"User with id : {id} does not exists");
             }
             
             return NoContent();
