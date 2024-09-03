@@ -15,9 +15,16 @@ public class ExamService : IExamService
         _userRepository = userRepository;
     }
 
-    public async Task<IEnumerable<ExamDto>> GetExams()
+    public async Task<IEnumerable<ExamDto>> GetExams(string? name = null)
     {
-        return await _examRepository.GetAllExamsAsync();
+        var exams = await _examRepository.GetAllExamsAsync();
+
+        if (!string.IsNullOrWhiteSpace(name))
+        {
+            exams = exams.Where(u => u.Name.Contains(name)).ToList();
+        }
+
+        return exams;
     }
 
     public async Task<ExamDto> GetExam(Guid id)

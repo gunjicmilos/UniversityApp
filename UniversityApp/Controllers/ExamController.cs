@@ -22,9 +22,9 @@ namespace UniversityManagament.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ExamDto>>> GetExams()
+        public async Task<ActionResult<IEnumerable<ExamDto>>> GetExams([FromQuery] string? name = null)
         {
-            var exams = await _examService.GetExams();
+            var exams = await _examService.GetExams(name);
 
             return Ok(exams);
         }
