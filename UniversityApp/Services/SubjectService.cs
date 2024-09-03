@@ -47,6 +47,7 @@ public class SubjectService : ISubjectService
             {
                 Name = createSubjectDto.Name,
                 DepartmentId = createSubjectDto.DepartmentId,
+                Espb = createSubjectDto.Espb
             };
 
             if (createSubjectDto.UsersIds != null && createSubjectDto.UsersIds.Any())
@@ -62,6 +63,7 @@ public class SubjectService : ISubjectService
                 Id = subject.Id,
                 Name = subject.Name,
                 DepartmentId = subject.DepartmentId,
+                Espb = subject.Espb,
                 UserIds = subject.UserSubjects.Select(us => us.UserId).ToList()
             };
 
@@ -74,6 +76,7 @@ public class SubjectService : ISubjectService
 
             subject.Name = updateSubjectDto.Name; ;
             subject.DepartmentId = updateSubjectDto.DepartmentId;
+            subject.Espb = updateSubjectDto.Espb;
 
             subject.UserSubjects.Clear();
             if (updateSubjectDto.UsersIds != null && updateSubjectDto.UsersIds.Any())

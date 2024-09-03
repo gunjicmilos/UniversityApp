@@ -24,6 +24,7 @@ public class SubjectRepository : ISubjectRepository
                 Id = s.Id,
                 Name = s.Name,
                 DepartmentId = s.DepartmentId,
+                Espb = s.Espb,
                 UserIds = s.UserSubjects.Select(us => us.UserId).ToList()
             }).ToListAsync();
         ;
@@ -38,6 +39,7 @@ public class SubjectRepository : ISubjectRepository
                 Id = s.Id,
                 Name = s.Name,
                 DepartmentId = s.DepartmentId,
+                Espb = s.Espb,
                 UserIds = s.UserSubjects.Select(us => us.UserId).ToList()
             })
             .FirstOrDefaultAsync(s => s.Id == id);

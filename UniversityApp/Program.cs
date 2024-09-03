@@ -63,7 +63,7 @@ builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
     options.AddPolicy("UserPolicy", policy => policy.RequireRole("User"));
-    options.AddPolicy("AssistantPolicy", policy => policy.RequireRole("Assistant"));
+    options.AddPolicy("FinancePolicy", policy => policy.RequireRole("Finance"));
     options.AddPolicy("ProfessorPolicy", policy => policy.RequireRole("Professor"));
 });
 
@@ -99,6 +99,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseRouting();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

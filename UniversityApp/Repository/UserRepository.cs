@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using UniversityApp.Repository.IRepository;
 using UniversityManagament.Data;

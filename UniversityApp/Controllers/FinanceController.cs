@@ -20,7 +20,7 @@ public class FinanceController : ControllerBase
         _facultyRepository = facultyRepository;
     }
 
-    //[Authorize(Policy = "AdminPolicy")]
+    [Authorize(Policy = "AdminPolicy")]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<FinanceReadDto>>> GetAllFinances()
     {
@@ -28,7 +28,7 @@ public class FinanceController : ControllerBase
         return Ok(finances);
     }
 
-    //[Authorize(Policy = "UserPolicy")]
+    [Authorize(Policy = "FinancePolicy")]
     [HttpGet("{id}")]
     public async Task<ActionResult<FinanceReadDto>> GetFinanceById(Guid id)
     {
@@ -40,6 +40,7 @@ public class FinanceController : ControllerBase
         return Ok(finance);
     }
 
+    [Authorize(Policy = "FinancePolicy")]
     [HttpPost]
     public async Task<ActionResult<FinanceReadDto>> CreateFinance(FinanceCreateDto financeCreateDto)
     {
@@ -50,6 +51,7 @@ public class FinanceController : ControllerBase
         return CreatedAtAction(nameof(GetFinanceById), new { id = financeReadDto.Id }, financeReadDto);
     }
 
+    [Authorize(Policy = "FinancePolicy")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateFinance(Guid id, FinanceCreateDto financeUpdateDto)
     {
@@ -64,6 +66,7 @@ public class FinanceController : ControllerBase
         return NoContent();
     }
 
+    [Authorize(Policy = "FinancePolicy")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteFinance(Guid id)
     {

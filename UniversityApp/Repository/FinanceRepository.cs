@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using UniversityApp.Repository.IRepository;
 using UniversityManagament.Data;
@@ -6,6 +7,7 @@ using UniversityManagament.Models.Dto;
 
 namespace UniversityApp.Repository;
 
+[Authorize]
 public class FinanceRepository : IFinanceRepository
 {
     private readonly DataContext _context;

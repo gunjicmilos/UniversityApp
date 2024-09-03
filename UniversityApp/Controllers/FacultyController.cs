@@ -62,8 +62,6 @@ namespace UniversityManagament.Controllers
             return NoContent();
         }
 
-        
-
         [HttpDelete]
         public async Task<ActionResult> DeleteFaculty(Guid id)
         {
