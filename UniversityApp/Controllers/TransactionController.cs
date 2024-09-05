@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UniversityManagament.Models;
 using UniversityManagament.Models.Dto;
@@ -18,12 +19,14 @@ public class TransactionController : ControllerBase
         _financeService = financeService;
     }
 
+    //[Authorize(Policy = "FinancePolicy")]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<BankTransaction>>> GetTransactions()
     {
         return await _transactionService.GetTransactions();
     }
 
+    //[Authorize(Policy = "FinancePolicy")]
     [HttpGet("{id}")]
     public async Task<ActionResult<BankTransaction>> GetTransaction(Guid id)
     {
@@ -46,6 +49,7 @@ public class TransactionController : ControllerBase
     }
 
 
+    //[Authorize(Policy = "FinancePolicy")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteTransaction(Guid id)
     {

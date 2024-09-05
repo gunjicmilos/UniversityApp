@@ -42,6 +42,7 @@ namespace UniversityManagament.Controllers
             return Ok(exam);
         }
 
+        //[Authorize(Policy = "AdminPolicy")]
         [HttpPost]
         public async Task<ActionResult<ExamDto>> CreateExam(CreateExamDto createExamDto)
         {
@@ -78,6 +79,7 @@ namespace UniversityManagament.Controllers
             return Ok(exam);
         }
 
+        //[Authorize(Policy = "AdminPolicy")]
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateExam(Guid Id, CreateExamDto updateExamDto)
         {
@@ -119,6 +121,7 @@ namespace UniversityManagament.Controllers
             return NoContent();
         }
 
+        //[Authorize(Policy = "AdminPolicy")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> deleteExam(Guid id)
         {

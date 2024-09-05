@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using UniversityApp.Repository.IRepository;
 using UniversityManagament.Models;
 using UniversityManagament.Models.Dto;
@@ -38,6 +39,7 @@ namespace UniversityManagament.Controllers
             return Ok(department);
         }
 
+        //[Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<ActionResult> CreateDepartment(CreateDepartmentsDto createDepartmentsDto)
         {
@@ -54,6 +56,7 @@ namespace UniversityManagament.Controllers
             return Ok(department);
         }
 
+        //[Authorize(Policy = "AdminPolicy")]
         [HttpPut("{id}")]
         public async Task<ActionResult<Department>> UpdateDepartment(Guid id, CreateDepartmentsDto updateDepartmentsDto)
         {
@@ -81,6 +84,7 @@ namespace UniversityManagament.Controllers
             return NoContent();
         }
 
+        //[Authorize(Policy = "AdminPolicy")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteDepartment(Guid id)
         {

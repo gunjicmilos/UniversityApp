@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using UniversityApp.Repository.IRepository;
 using UniversityManagament.Models.Dto;
 using UniversityManagament.Services.Interfaces;
 
@@ -40,6 +39,7 @@ namespace UniversityManagament.Controllers
             return Ok(subject);
         }
 
+        //[Authorize(Policy = "AdminPolicy")]
         [HttpPost]
         public async Task<ActionResult<SubjectDto>> CreateSubject(CreateSubjectDto createSubjectDto)
         {
@@ -68,6 +68,7 @@ namespace UniversityManagament.Controllers
             return Ok(subject);
         }
 
+        //[Authorize(Policy = "AdminPolicy")]
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateSubject(Guid id, CreateSubjectDto updateSubjectDto)
         {
@@ -106,6 +107,7 @@ namespace UniversityManagament.Controllers
             return NoContent();
         }
 
+        //[Authorize(Policy = "AdminPolicy")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteSubject(Guid id)
         {

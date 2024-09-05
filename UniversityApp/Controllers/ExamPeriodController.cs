@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using UniversityManagament.Models.Dto;
-using UniversityManagament.Services;
 using UniversityManagament.Services.Interfaces;
 
 namespace UniversityManagament.Controllers
@@ -38,6 +38,7 @@ namespace UniversityManagament.Controllers
             return Ok(examPeriod);
         }
 
+        //[Authorize(Policy = "AdminPolicy")]
         [HttpPost]
         public async Task<ActionResult<ExamDto>> CreateExamPeriod(CreateExamPeriodDto createExamPeriodDto)
         {
@@ -59,6 +60,7 @@ namespace UniversityManagament.Controllers
             return Ok(examPeriod);
         }
 
+        //[Authorize(Policy = "AdminPolicy")]
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateExamPerion(Guid id, CreateExamPeriodDto updateExamPeriodDto)
         {
@@ -84,6 +86,7 @@ namespace UniversityManagament.Controllers
             return NoContent();
         }
 
+        //[Authorize(Policy = "AdminPolicy")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteExamPerion(Guid id)
         {

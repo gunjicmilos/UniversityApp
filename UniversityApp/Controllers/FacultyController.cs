@@ -22,7 +22,7 @@ namespace UniversityManagament.Controllers
             return Ok(faculties);
         }
 
-        [HttpGet("{id}")]
+        //[HttpGet("{id}")]
         public async Task<ActionResult<FacultyDto>> GetFaculty(Guid id)
         {
             var faculties = await _facultyService.GetFaculty(id);
@@ -35,6 +35,7 @@ namespace UniversityManagament.Controllers
             return Ok(faculties);
         }
 
+        //[Authorize(Policy = "AdminPolicy")]
         [HttpPost]
         public async Task<ActionResult<FacultyDto>> CreateFaculty(CreateFacultyDto createFacultyDto)
         {
@@ -49,6 +50,7 @@ namespace UniversityManagament.Controllers
             }
         }
 
+        //[Authorize(Policy = "AdminPolicy")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateFaculty(Guid id, CreateFacultyDto updateFacultyDto)
         {
@@ -62,6 +64,7 @@ namespace UniversityManagament.Controllers
             return NoContent();
         }
 
+        //[Authorize(Policy = "AdminPolicy")]
         [HttpDelete]
         public async Task<ActionResult> DeleteFaculty(Guid id)
         {
@@ -75,6 +78,7 @@ namespace UniversityManagament.Controllers
             return NoContent();
         }
 
+        //[Authorize(Policy = "AdminPolicy")]
         [HttpPost("/addUser")]
         public async Task<ActionResult> AddUserToFaculty(AssignUserDto addUserDto)
         {
@@ -90,28 +94,5 @@ namespace UniversityManagament.Controllers
 
             return NoContent();
         }
-
-        /*[HttpDelete("/removeUser")]
-        public async Task<ActionResult> DeleteUserFromFaculty(AssignUserDto removeUserDto)
-        {
-            var faculty = await _facultyService.DeleteFaculty(removeUserDto);
-
-            if (faculty == null)
-            {
-                return NotFound("Faculty doesnt not exists");
-            }
-
-            var userFaculty = faculty.UserFaculties
-                .FirstOrDefault(uf => uf.UserId == removeUserDto.UserId);
-
-            if (userFaculty == null)
-            {
-                return NotFound("User doesnt not exists on this faculty");
-            }
-
-            faculty.UserFaculties.Remove(userFaculty);
-            await _context.SaveChangesAsync();
-
-            return NoContent();*/
     }
 }

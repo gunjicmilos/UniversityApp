@@ -88,6 +88,10 @@ builder.Services.AddScoped<IFinanceRepository, FinanceRepository>();
 builder.Services.AddScoped<ISubjectRepository, SubjectRepository>();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 
+builder.Services.AddHttpClient<AiService>();
+builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+builder.Services.Configure<AiService>(builder.Configuration.GetSection("OpenAI"));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
