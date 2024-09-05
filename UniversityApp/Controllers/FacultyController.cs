@@ -22,7 +22,7 @@ namespace UniversityManagament.Controllers
             return Ok(faculties);
         }
 
-        //[HttpGet("{id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<FacultyDto>> GetFaculty(Guid id)
         {
             var faculties = await _facultyService.GetFaculty(id);
