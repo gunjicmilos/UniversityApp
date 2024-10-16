@@ -14,13 +14,11 @@ namespace UniversityApp.Controllers
     {
 
         private readonly IUserService _userService;
-        private readonly ITokenService _tokenService;
         private readonly ILogger<UserController> _logger;
 
-        public UserController(IUserService userService, ITokenService tokenService, ILogger<UserController> logger)
+        public UserController(IUserService userService, ILogger<UserController> logger)
         {
             _userService = userService;
-            _tokenService = tokenService;
             _logger = logger;
         }
 
@@ -121,32 +119,12 @@ namespace UniversityApp.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             } 
         }
-
-        [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginDto loginRequest)
-        {
-            try {
-                var user = await _userService.ValidateUserAsync(loginRequest.Username, loginRequest.Password);
-                if (user == null)
-                {
-                    return Unauthorized("Invalid credentials.");
-                }
-
-                var token = await _tokenService.GenerateTokenAsync(user);
-                return Ok(new { Token = token });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred while fetching universities.");
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            } 
-        }
-
+        
         [HttpPost("login2")]
         public string Login2([FromBody] LoginDto loginRequest)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("your_secret_key");
+            var key = Encoding.ASCII.GetBytes("your_secret_key31231231231231312312312312");
     
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -160,6 +138,7 @@ namespace UniversityApp.Controllers
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);        } 
+            return tokenHandler.WriteToken(token);        
+        } 
     }
 }

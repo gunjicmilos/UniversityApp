@@ -5,12 +5,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using UniversityApp.Data;
 using UniversityApp.Middlewares;
-using UniversityApp.Models;
 using UniversityApp.Repository;
 using UniversityApp.Repository.IRepository;
 using UniversityApp.Services;
 using UniversityApp.Services.Interfaces;
-using UniversityManagament.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,37 +35,55 @@ builder.Services.AddDbContext<DataContext>(options =>
     options.UseSqlServer(connectionString);
 });
 
-var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
-builder.Services.AddSingleton(jwtSettings);
+var key = Encoding.ASCII.GetBytes("your_secret_key31231231231231312312312312");
 
-builder.Services.AddAuthentication(options =>
+builder.Services.AddAuthentication(x =>
     {
-        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     })
     .AddJwtBearer(options =>
     {
+        options.RequireHttpsMetadata = false;
+        options.SaveToken = true;
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = jwtSettings.Issuer,
-            ValidAudience = jwtSettings.Audience,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.SecretKey))
+            IssuerSigningKey = new SymmetricSecurityKey(key),
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            //RoleClaimType = "role",  // Koristi "role" za claim tip role
+            ValidateLifetime = true
+        };
+
+        options.Events = new JwtBearerEvents
+        {
+            OnAuthenticationFailed = context =>
+            {
+                Console.WriteLine($"Authentication failed: {context.Exception.Message}");
+                return Task.CompletedTask;
+            },
+            OnTokenValidated = context =>
+            {
+                Console.WriteLine("Token validated successfully.");
+                return Task.CompletedTask;
+            },
+            OnChallenge = context =>
+            {
+                Console.WriteLine("Token is invalid or missing.");
+                return Task.CompletedTask;
+            }
         };
     });
-
-
 
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
-    options.AddPolicy("UserPolicy", policy => policy.RequireRole("User"));
-    options.AddPolicy("FinancePolicy", policy => policy.RequireRole("Finance"));
-    options.AddPolicy("ProfessorPolicy", policy => policy.RequireRole("Professor"));
+    options.AddPolicy("ProfessorPolicy", policy => policy.RequireRole("profesor"));
+    options.AddPolicy("UserPolicy", policy => policy.RequireRole("user", "profesor", "admin")); // Za više rola
 });
+
+builder.Services.AddControllers();
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
@@ -79,7 +95,6 @@ builder.Services.AddScoped<IFacultyService, FacultyService>();
 builder.Services.AddScoped<ISubjectService, SubjectService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IFinanceService, FinanceService>();
-builder.Services.AddScoped<ITokenService,TokenService>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<IUniversityService, UniversityService>();
 
