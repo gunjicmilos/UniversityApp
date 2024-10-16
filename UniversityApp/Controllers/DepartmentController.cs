@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using UniversityApp.Models;
 using UniversityApp.Repository.IRepository;
+using UniversityApp.Services.Interfaces;
 using UniversityManagament.Models;
 using UniversityManagament.Models.Dto;
-using UniversityManagament.Services.Interfaces;
 
 namespace UniversityApp.Controllers
 {
@@ -13,9 +13,9 @@ namespace UniversityApp.Controllers
     {
         private readonly IDepartmentService _departmentService;
         private readonly IFacultyRepository _facultyRepository;
-        private readonly ILogger _logger;
+        private readonly ILogger<DepartmentController> _logger;
 
-        public DepartmentController(IDepartmentService departmentService, IFacultyRepository facultyRepository, ILogger logger)
+        public DepartmentController(IDepartmentService departmentService, IFacultyRepository facultyRepository, ILogger<DepartmentController> logger)
         {
             _departmentService = departmentService;
             _facultyRepository = facultyRepository;

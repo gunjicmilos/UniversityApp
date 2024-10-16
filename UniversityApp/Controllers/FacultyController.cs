@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using UniversityApp.Services.Interfaces;
 using UniversityManagament.Models.Dto;
-using UniversityManagament.Services.Interfaces;
 
 namespace UniversityApp.Controllers
 {
@@ -9,9 +9,9 @@ namespace UniversityApp.Controllers
     public class FacultyController : ControllerBase
     {
         private readonly IFacultyService _facultyService;
-        private readonly ILogger _logger;
+        private readonly ILogger<FacultyController> _logger;
 
-        public FacultyController(IFacultyService facultyService, ILogger logger)
+        public FacultyController(IFacultyService facultyService, ILogger<FacultyController> logger)
         {
             _facultyService = facultyService;
             _logger = logger;

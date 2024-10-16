@@ -1,6 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using UniversityApp.Services.Interfaces;
 using UniversityManagament.Models.Dto;
-using UniversityManagament.Services.Interfaces;
 
 namespace UniversityApp.Controllers
 {
@@ -11,9 +15,9 @@ namespace UniversityApp.Controllers
 
         private readonly IUserService _userService;
         private readonly ITokenService _tokenService;
-        private readonly ILogger _logger;
+        private readonly ILogger<UserController> _logger;
 
-        public UserController(IUserService userService, ITokenService tokenService, ILogger logger)
+        public UserController(IUserService userService, ITokenService tokenService, ILogger<UserController> logger)
         {
             _userService = userService;
             _tokenService = tokenService;
@@ -137,5 +141,25 @@ namespace UniversityApp.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             } 
         }
+
+        [HttpPost("login2")]
+        public string Login2([FromBody] LoginDto loginRequest)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes("your_secret_key");
+    
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, loginRequest.Username),
+                    new Claim(ClaimTypes.Role, "Admin") // Dodaj rolu u token
+                }),
+                Expires = DateTime.UtcNow.AddHours(1),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);        } 
     }
 }

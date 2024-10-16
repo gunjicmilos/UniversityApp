@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using UniversityApp.Models;
+using UniversityApp.Services.Interfaces;
 using UniversityManagament.Models;
 using UniversityManagament.Models.Dto;
-using UniversityManagament.Services.Interfaces;
 
 namespace UniversityApp.Controllers;
 
@@ -12,9 +12,9 @@ public class TransactionController : ControllerBase
 {
     private readonly ITransactionService _transactionService;
     private readonly IFinanceService _financeService;
-    private readonly ILogger _logger;
+    private readonly ILogger<TransactionController> _logger;
 
-    public TransactionController(ITransactionService transactionService, IFinanceService financeService, ILogger logger)
+    public TransactionController(ITransactionService transactionService, IFinanceService financeService, ILogger<TransactionController> logger)
     {
         _transactionService = transactionService;
         _financeService = financeService;

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using UniversityApp.Controllers;
+using UniversityApp.Services.Interfaces;
 using UniversityManagament.Models.Dto;
-using UniversityManagament.Services.Interfaces;
 
 namespace UniversityManagament.Controllers
 {

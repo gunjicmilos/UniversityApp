@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using UniversityApp.Models;
 using UniversityApp.Repository.IRepository;
+using UniversityApp.Services.Interfaces;
 using UniversityManagament.Models;
 using UniversityManagament.Models.Dto;
-using UniversityManagament.Services.Interfaces;
 
 namespace UniversityApp.Services;
 

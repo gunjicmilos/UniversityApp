@@ -1,9 +1,8 @@
-using Microsoft.AspNetCore.Mvc;
 using UniversityApp.Models;
 using UniversityManagament.Models;
 using UniversityManagament.Models.Dto;
 
-namespace UniversityManagament.Services.Interfaces;
+namespace UniversityApp.Services.Interfaces;
 
 public interface IFacultyService
 {

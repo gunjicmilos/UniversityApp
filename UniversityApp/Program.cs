@@ -9,9 +9,8 @@ using UniversityApp.Models;
 using UniversityApp.Repository;
 using UniversityApp.Repository.IRepository;
 using UniversityApp.Services;
+using UniversityApp.Services.Interfaces;
 using UniversityManagament.Models;
-using UniversityManagament.Services;
-using UniversityManagament.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -69,6 +68,9 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("FinancePolicy", policy => policy.RequireRole("Finance"));
     options.AddPolicy("ProfessorPolicy", policy => policy.RequireRole("Professor"));
 });
+
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
 
 builder.Services.AddScoped<IDepartmentService, DepartmentService>();
 builder.Services.AddScoped<IExamPeriodService, ExamPeriodService>();

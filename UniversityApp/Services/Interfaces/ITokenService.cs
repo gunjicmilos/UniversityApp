@@ -1,7 +1,6 @@
 using UniversityApp.Models;
-using UniversityManagament.Models;
 
-namespace UniversityManagament.Services.Interfaces;
+namespace UniversityApp.Services.Interfaces;
 
 public interface ITokenService
 {

@@ -3,8 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using UniversityApp.Models;
-using UniversityManagament.Models;
-using UniversityManagament.Services.Interfaces;
+using UniversityApp.Services.Interfaces;
 
 namespace UniversityApp.Services
 {

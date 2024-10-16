@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using UniversityApp.Repository.IRepository;
+using UniversityApp.Services.Interfaces;
 using UniversityManagament.Models.Dto;
-using UniversityManagament.Services.Interfaces;
 
 namespace UniversityApp.Controllers;
 
@@ -11,9 +11,9 @@ public class FinanceController : ControllerBase
 {
     private readonly IFinanceService _financeService;
     private readonly IFacultyRepository _facultyRepository;
-    private readonly ILogger _logger;
+    private readonly ILogger<FinanceController> _logger;
 
-    public FinanceController(IFinanceService financeService, IFacultyRepository facultyRepository, ILogger logger)
+    public FinanceController(IFinanceService financeService, IFacultyRepository facultyRepository, ILogger<FinanceController> logger)
     {
         _financeService = financeService;
         _facultyRepository = facultyRepository;

@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using UniversityApp.Services;
-using UniversityManagament.Services;
 
 namespace UniversityApp.Controllers;
 

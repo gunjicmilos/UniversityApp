@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using UniversityApp.Services.Interfaces;
 using UniversityManagament.Models.Dto;
-using UniversityManagament.Services.Interfaces;
 
 namespace UniversityApp.Controllers
 {
@@ -11,9 +11,9 @@ namespace UniversityApp.Controllers
         private readonly ISubjectService _subjectService;
         private readonly IDepartmentService _departmentService;
         private readonly IUserService _userService;
-        private readonly ILogger _logger;
+        private readonly ILogger<SubjectController> _logger;
 
-        public SubjectController(ISubjectService subjectService, IDepartmentService departmentService, IUserService userService, ILogger logger)
+        public SubjectController(ISubjectService subjectService, IDepartmentService departmentService, IUserService userService, ILogger<SubjectController> logger)
         {
             _subjectService = subjectService;
             _departmentService = departmentService;

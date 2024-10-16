@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using UniversityApp.Services.Interfaces;
 using UniversityManagament.Models.Dto;
-using UniversityManagament.Services.Interfaces;
 
 namespace UniversityApp.Controllers
 {
@@ -10,9 +10,9 @@ namespace UniversityApp.Controllers
     {
         private readonly IFacultyService _facultyService;
         private readonly IExamPeriodService _examPeriodService;
-        private readonly ILogger _logger;
+        private readonly ILogger<ExamPeriodController> _logger;
 
-        public ExamPeriodController(IExamPeriodService examPeriodService, IFacultyService facultyService, ILogger logger)
+        public ExamPeriodController(IExamPeriodService examPeriodService, IFacultyService facultyService, ILogger<ExamPeriodController> logger)
         {
             _examPeriodService = examPeriodService;
             _facultyService = facultyService;
