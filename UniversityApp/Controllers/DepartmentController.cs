@@ -13,11 +13,13 @@ namespace UniversityManagament.Controllers
     {
         private readonly IDepartmentService _departmentService;
         private readonly IFacultyRepository _facultyRepository;
+        private readonly ILogger _logger;
 
-        public DepartmentController(IDepartmentService departmentService, IFacultyRepository facultyRepository)
+        public DepartmentController(IDepartmentService departmentService, IFacultyRepository facultyRepository, ILogger logger)
         {
             _departmentService = departmentService;
             _facultyRepository = facultyRepository;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -29,67 +31,99 @@ namespace UniversityManagament.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> GetDepartment(Guid id)
         {
-            var department = await _departmentService.GetDepartmentAsync(id);
-
-            if (department == null)
+            try
             {
-                return NotFound($"Department with id {id} not found");
-            }
+                var department = await _departmentService.GetDepartmentAsync(id);
 
-            return Ok(department);
+                if (department == null)
+                {
+                    return NotFound($"Department with id {id} not found");
+                }
+
+                return Ok(department);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while fetching universities.");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         //[Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<ActionResult> CreateDepartment(CreateDepartmentsDto createDepartmentsDto)
         {
-            var departmentExists =
-                await _departmentService.DepartmentExistsInFaculty(createDepartmentsDto.Name,
-                    createDepartmentsDto.FacultyId);
-
-            if (departmentExists)
+            try
             {
-                return BadRequest($"Department with name : {createDepartmentsDto.Name} already exists on faculty");
+                var departmentExists =
+                    await _departmentService.DepartmentExistsInFaculty(createDepartmentsDto.Name,
+                        createDepartmentsDto.FacultyId);
+
+                if (departmentExists)
+                {
+                    return BadRequest($"Department with name : {createDepartmentsDto.Name} already exists on faculty");
+                }
+
+                var department = await _departmentService.CreateDepartmentAsync(createDepartmentsDto);
+                return Ok(department);
             }
-            
-            var department = await _departmentService.CreateDepartmentAsync(createDepartmentsDto);
-            return Ok(department);
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while fetching universities.");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            } 
         }
 
         //[Authorize(Policy = "AdminPolicy")]
         [HttpPut("{id}")]
         public async Task<ActionResult<Department>> UpdateDepartment(Guid id, CreateDepartmentsDto updateDepartmentsDto)
         {
-            var faculty = await _facultyRepository.GetFacultyByIdAsync(updateDepartmentsDto.FacultyId);
-            if (faculty == null)
+            try
             {
-                return NotFound($"Faculty with id : {updateDepartmentsDto.FacultyId} does not exists");
-            }
-            
-            var departmentExists =
-                await _departmentService.DepartmentExistsInFaculty(updateDepartmentsDto.Name,
-                    updateDepartmentsDto.FacultyId);
+                var faculty = await _facultyRepository.GetFacultyByIdAsync(updateDepartmentsDto.FacultyId);
+                if (faculty == null)
+                {
+                    return NotFound($"Faculty with id : {updateDepartmentsDto.FacultyId} does not exists");
+                }
 
-            if (departmentExists)
-            {
-                return BadRequest($"Department with name : {updateDepartmentsDto.Name} already exists on faculty");
-            }
-            
-            var department = await _departmentService.UpdateDepartmentAsync(id, updateDepartmentsDto);
-            if (department == null)
-            {
-                return NotFound($"Department with id : {id} already exists on faculty");
-            }
+                var departmentExists =
+                    await _departmentService.DepartmentExistsInFaculty(updateDepartmentsDto.Name,
+                        updateDepartmentsDto.FacultyId);
 
-            return NoContent();
+                if (departmentExists)
+                {
+                    return BadRequest($"Department with name : {updateDepartmentsDto.Name} already exists on faculty");
+                }
+
+                var department = await _departmentService.UpdateDepartmentAsync(id, updateDepartmentsDto);
+                if (department == null)
+                {
+                    return NotFound($"Department with id : {id} already exists on faculty");
+                }
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while fetching universities.");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            } 
         }
 
         //[Authorize(Policy = "AdminPolicy")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteDepartment(Guid id)
         {
-            await _departmentService.DeleteDepartment(id);
-            return NoContent();
+            try
+            {
+                await _departmentService.DeleteDepartment(id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while fetching universities.");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            } 
         }
     }
 }

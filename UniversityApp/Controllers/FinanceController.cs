@@ -13,68 +13,114 @@ public class FinanceController : ControllerBase
 {
     private readonly IFinanceService _financeService;
     private readonly IFacultyRepository _facultyRepository;
+    private readonly ILogger _logger;
 
-    public FinanceController(IFinanceService financeService, IFacultyRepository facultyRepository)
+    public FinanceController(IFinanceService financeService, IFacultyRepository facultyRepository, ILogger logger)
     {
         _financeService = financeService;
         _facultyRepository = facultyRepository;
+        _logger = logger;
     }
 
     //[Authorize(Policy = "FinancePolicy")]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<FinanceReadDto>>> GetAllFinances()
     {
-        var finances = await _financeService.GetAllFinancesAsync();
-        return Ok(finances);
+        try
+        {
+            var finances = await _financeService.GetAllFinancesAsync();
+            return Ok(finances);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error occurred while fetching universities.");
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        } 
     }
 
     //[Authorize(Policy = "FinancePolicy")]
     [HttpGet("{id}")]
     public async Task<ActionResult<FinanceReadDto>> GetFinanceById(Guid id)
     {
-        var finance = await _financeService.GetFinanceByIdAsync(id);
-        if (finance == null)
+        try
         {
-            return NotFound($"Finance with id : {id} not found");
+            var finance = await _financeService.GetFinanceByIdAsync(id);
+            if (finance == null)
+            {
+                return NotFound($"Finance with id : {id} not found");
+            }
+
+            return Ok(finance);
         }
-        return Ok(finance);
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error occurred while fetching universities.");
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        } 
     }
 
     //[Authorize(Policy = "FinancePolicy")]
     [HttpPost]
     public async Task<ActionResult<FinanceReadDto>> CreateFinance(FinanceCreateDto financeCreateDto)
     {
-        if (await _facultyRepository.GetFacultyByIdAsync(financeCreateDto.FacultyId) == null)
-            return NotFound($"Faculty with id : {financeCreateDto.FacultyId} not found");
-        
-        var financeReadDto = await _financeService.CreateFinanceAsync(financeCreateDto);
-        return CreatedAtAction(nameof(GetFinanceById), new { id = financeReadDto.Id }, financeReadDto);
+        try
+        {
+            if (await _facultyRepository.GetFacultyByIdAsync(financeCreateDto.FacultyId) == null)
+                return NotFound($"Faculty with id : {financeCreateDto.FacultyId} not found");
+
+            var financeReadDto = await _financeService.CreateFinanceAsync(financeCreateDto);
+            //return CreatedAtAction(nameof(GetFinanceById), new { id = financeReadDto.Id }, financeReadDto);
+            return Ok(financeReadDto);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error occurred while fetching universities.");
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        } 
     }
 
     //[Authorize(Policy = "FinancePolicy")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateFinance(Guid id, FinanceCreateDto financeUpdateDto)
     {
-        if (await _facultyRepository.GetFacultyByIdAsync(financeUpdateDto.FacultyId) == null)
-            return NotFound($"Faculty with id : {financeUpdateDto.FacultyId} not found");
-        
-        var result = await _financeService.UpdateFinanceAsync(id, financeUpdateDto);
-        if (!result)
+        try
         {
-            return NotFound($"Finance with id : {id} not found");
+            if (await _facultyRepository.GetFacultyByIdAsync(financeUpdateDto.FacultyId) == null)
+                return NotFound($"Faculty with id : {financeUpdateDto.FacultyId} not found");
+
+            var result = await _financeService.UpdateFinanceAsync(id, financeUpdateDto);
+            if (!result)
+            {
+                return NotFound($"Finance with id : {id} not found");
+            }
+
+            return NoContent();
         }
-        return NoContent();
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error occurred while fetching universities.");
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        } 
     }
 
     //[Authorize(Policy = "FinancePolicy")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteFinance(Guid id)
     {
-        var result = await _financeService.DeleteFinanceAsync(id);
-        if (!result)
+        try
         {
-            return NotFound($"Finance with id : {id} not found");
+            var result = await _financeService.DeleteFinanceAsync(id);
+            if (!result)
+            {
+                return NotFound($"Finance with id : {id} not found");
+            }
+
+            return NoContent();
         }
-        return NoContent();
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error occurred while fetching universities.");
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        } 
     }
 }

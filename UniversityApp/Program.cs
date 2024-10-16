@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using UniversityApp.Middlewares;
 using UniversityApp.Repository;
 using UniversityApp.Repository.IRepository;
 using UniversityManagament.Data;
@@ -102,6 +103,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
 app.UseRouting();
 app.UseAuthentication();
