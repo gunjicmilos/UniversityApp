@@ -1,11 +1,9 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UniversityApp.Repository.IRepository;
 using UniversityManagament.Models.Dto;
-using UniversityManagament.Services;
 using UniversityManagament.Services.Interfaces;
 
-namespace UniversityManagament.Controllers;
+namespace UniversityApp.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]

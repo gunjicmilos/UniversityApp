@@ -1,4 +1,6 @@
-﻿namespace UniversityManagament.Models
+﻿using UniversityApp.Models;
+
+namespace UniversityManagament.Models
 {
     public class Faculty
     {

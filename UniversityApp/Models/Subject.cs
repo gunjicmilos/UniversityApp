@@ -1,6 +1,6 @@
-﻿using System.Collections;
+﻿using UniversityManagament.Models;
 
-namespace UniversityManagament.Models
+namespace UniversityApp.Models
 {
     public class Subject
     {

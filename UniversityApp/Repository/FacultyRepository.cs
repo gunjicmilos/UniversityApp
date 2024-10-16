@@ -1,6 +1,7 @@
     using Microsoft.EntityFrameworkCore;
+    using UniversityApp.Data;
+    using UniversityApp.Models;
     using UniversityApp.Repository.IRepository;
-    using UniversityManagament.Data;
     using UniversityManagament.Models;
     using UniversityManagament.Models.Dto;
 

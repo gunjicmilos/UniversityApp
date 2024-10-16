@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
+using UniversityApp.Services;
 using UniversityManagament.Services;
 
-namespace UniversityManagament.Controllers;
+namespace UniversityApp.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

@@ -1,4 +1,4 @@
-namespace UniversityManagament.Services;
+namespace UniversityApp.Services;
 
 public class AiService
 {

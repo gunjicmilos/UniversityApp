@@ -1,3 +1,4 @@
+using UniversityApp.Models;
 using UniversityManagament.Models;
 using UniversityManagament.Models.Dto;
 

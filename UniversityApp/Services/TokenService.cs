@@ -2,10 +2,11 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using UniversityApp.Models;
 using UniversityManagament.Models;
 using UniversityManagament.Services.Interfaces;
 
-namespace UniversityManagament.Services
+namespace UniversityApp.Services
 {
 
     public class TokenService : ITokenService

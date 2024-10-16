@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations.Schema;
+using UniversityApp.Models;
 
 namespace UniversityManagament.Models.Dto;
 

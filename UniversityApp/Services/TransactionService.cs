@@ -1,9 +1,10 @@
+using UniversityApp.Models;
 using UniversityApp.Repository.IRepository;
 using UniversityManagament.Models;
 using UniversityManagament.Models.Dto;
 using UniversityManagament.Services.Interfaces;
 
-namespace UniversityManagament.Services;
+namespace UniversityApp.Services;
 
 public class TransactionService : ITransactionService
 {

@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using UniversityApp.Models;
 using UniversityManagament.Models;
 
-namespace UniversityManagament.Data
+namespace UniversityApp.Data
 {
     public class DataContext : DbContext
     {

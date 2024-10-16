@@ -1,4 +1,4 @@
-﻿namespace UniversityManagament.Models
+﻿namespace UniversityApp.Models
 {
     public class UserExam
     {

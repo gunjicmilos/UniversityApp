@@ -1,7 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using UniversityManagament.Models;
 
-namespace UniversityManagament.Models;
+namespace UniversityApp.Models;
 
 public class Finance
 {

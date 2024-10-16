@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using UniversityApp.Models;
 using UniversityManagament.Models;
 using UniversityManagament.Models.Dto;
 

@@ -1,4 +1,6 @@
-﻿namespace UniversityManagament.Models
+﻿using UniversityManagament.Models;
+
+namespace UniversityApp.Models
 {
     public class ExamPeriod
     {
