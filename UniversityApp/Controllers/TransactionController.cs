@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UniversityApp.Models;
 using UniversityApp.Services.Interfaces;
-using UniversityManagament.Models;
 using UniversityManagament.Models.Dto;
 
 namespace UniversityApp.Controllers;
@@ -32,7 +31,7 @@ public class TransactionController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error occurred while fetching universities.");
+            _logger.LogError(ex, "Error occurred while fetching transactions.");
             return StatusCode(500, $"Internal server error: {ex.Message}");
         } 
     }
@@ -51,7 +50,7 @@ public class TransactionController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error occurred while fetching universities.");
+            _logger.LogError(ex, "Error occurred while fetching transactions.");
             return StatusCode(500, $"Internal server error: {ex.Message}");
         } 
     }
@@ -70,7 +69,7 @@ public class TransactionController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error occurred while fetching universities.");
+            _logger.LogError(ex, "Error occurred while creating transactions.");
             return StatusCode(500, $"Internal server error: {ex.Message}");
         } 
     }
@@ -89,7 +88,7 @@ public class TransactionController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error occurred while fetching universities.");
+            _logger.LogError(ex, "Error occurred while deleting transactions.");
             return StatusCode(500, $"Internal server error: {ex.Message}");
         } 
     }

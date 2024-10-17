@@ -30,7 +30,7 @@ namespace UniversityApp.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred while fetching universities.");
+                _logger.LogError(ex, "Error occurred while fetching exam periods.");
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             } 
         }
@@ -81,7 +81,7 @@ namespace UniversityApp.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred while fetching universities.");
+                _logger.LogError(ex, "Error occurred while creating exam periods.");
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             } 
         }
@@ -116,7 +116,7 @@ namespace UniversityApp.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred while fetching universities.");
+                _logger.LogError(ex, "Error occurred while updating exam periods.");
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             } 
         }
@@ -138,7 +138,7 @@ namespace UniversityApp.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred while fetching universities.");
+                _logger.LogError(ex, "Error occurred while deleting exam periods.");
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             } 
         }

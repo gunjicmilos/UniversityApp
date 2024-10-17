@@ -32,7 +32,7 @@ public class FinanceController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error occurred while fetching universities.");
+            _logger.LogError(ex, "Error occurred while fetching finances.");
             return StatusCode(500, $"Internal server error: {ex.Message}");
         } 
     }
@@ -53,7 +53,7 @@ public class FinanceController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error occurred while fetching universities.");
+            _logger.LogError(ex, "Error occurred while fetching finances.");
             return StatusCode(500, $"Internal server error: {ex.Message}");
         } 
     }
@@ -73,7 +73,7 @@ public class FinanceController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error occurred while fetching universities.");
+            _logger.LogError(ex, "Error occurred while creating finances.");
             return StatusCode(500, $"Internal server error: {ex.Message}");
         } 
     }
@@ -97,7 +97,7 @@ public class FinanceController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error occurred while fetching universities.");
+            _logger.LogError(ex, "Error occurred while updating finances.");
             return StatusCode(500, $"Internal server error: {ex.Message}");
         } 
     }
@@ -118,7 +118,7 @@ public class FinanceController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error occurred while fetching universities.");
+            _logger.LogError(ex, "Error occurred while deleting finances.");
             return StatusCode(500, $"Internal server error: {ex.Message}");
         } 
     }

@@ -29,7 +29,7 @@ namespace UniversityApp.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred while fetching universities.");
+                _logger.LogError(ex, "Error occurred while fetching faculties.");
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             } 
         }   
@@ -50,7 +50,7 @@ namespace UniversityApp.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred while fetching universities.");
+                _logger.LogError(ex, "Error occurred while fetching faculties.");
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             } 
         }
@@ -73,7 +73,7 @@ namespace UniversityApp.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred while fetching universities.");
+                _logger.LogError(ex, "Error occurred while creating faculties.");
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             } 
         }
@@ -95,7 +95,7 @@ namespace UniversityApp.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred while fetching universities.");
+                _logger.LogError(ex, "Error occurred while updating faculties.");
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             } 
         }
@@ -117,7 +117,7 @@ namespace UniversityApp.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred while fetching universities.");
+                _logger.LogError(ex, "Error occurred while deleting faculties.");
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             } 
         }
@@ -143,7 +143,7 @@ namespace UniversityApp.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred while fetching universities.");
+                _logger.LogError(ex, "Error occurred while adding users to faculties.");
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             } 
         }

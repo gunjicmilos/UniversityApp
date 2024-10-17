@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using UniversityApp.Models;
 using UniversityApp.Repository.IRepository;
 using UniversityApp.Services.Interfaces;
-using UniversityManagament.Models;
 using UniversityManagament.Models.Dto;
 
 namespace UniversityApp.Controllers
@@ -26,7 +25,15 @@ namespace UniversityApp.Controllers
         [HttpGet]
         public async Task<ActionResult> GetDepartments([FromQuery] string? name = null, [FromQuery] Guid? facultyId = null)
         {
-            return Ok(await _departmentService.GetDepartmentsAsync(name, facultyId));
+            try
+            {
+                return Ok(await _departmentService.GetDepartmentsAsync(name, facultyId));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while fetching departments.");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpGet("{id}")]
@@ -45,7 +52,7 @@ namespace UniversityApp.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred while fetching universities.");
+                _logger.LogError(ex, "Error occurred while fetching departments.");
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
@@ -70,7 +77,7 @@ namespace UniversityApp.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred while fetching universities.");
+                _logger.LogError(ex, "Error occurred while creating departments.");
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             } 
         }
@@ -106,7 +113,7 @@ namespace UniversityApp.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred while fetching universities.");
+                _logger.LogError(ex, "Error occurred while updating departments.");
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             } 
         }
@@ -122,7 +129,7 @@ namespace UniversityApp.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred while fetching universities.");
+                _logger.LogError(ex, "Error occurred while deleteing departments.");
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             } 
         }

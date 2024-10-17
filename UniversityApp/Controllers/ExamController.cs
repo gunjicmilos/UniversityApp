@@ -30,12 +30,11 @@ namespace UniversityApp.Controllers
             try
             {
                 var exams = await _examService.GetExams(name);
-
                 return Ok(exams);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred while fetching universities.");
+                _logger.LogError(ex, "Error occurred while fetching exams.");
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             } 
         }
@@ -101,7 +100,7 @@ namespace UniversityApp.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred while fetching universities.");
+                _logger.LogError(ex, "Error occurred while creting exams.");
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             } 
         }
@@ -151,7 +150,7 @@ namespace UniversityApp.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred while fetching universities.");
+                _logger.LogError(ex, "Error occurred while updating exams.");
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             } 
         }
@@ -173,7 +172,7 @@ namespace UniversityApp.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error occurred while fetching universities.");
+                _logger.LogError(ex, "Error occurred while deleting exams.");
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             } 
         }
