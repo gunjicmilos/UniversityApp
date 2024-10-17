@@ -59,7 +59,7 @@ namespace UniversityApp.Controllers
             } 
         }
 
-        [Authorize(Policy = "AdminPolicy")]
+        [Authorize(Policy = "ProfessorPolicy")]
         [HttpPost]
         public async Task<ActionResult<SubjectDto>> CreateSubject(CreateSubjectDto createSubjectDto)
         {
@@ -95,7 +95,7 @@ namespace UniversityApp.Controllers
             } 
         }
 
-        [Authorize(Policy = "AdminPolicy")]
+        [Authorize(Policy = "ProfessorPolicy")]
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateSubject(Guid id, CreateSubjectDto updateSubjectDto)
         {
@@ -145,7 +145,7 @@ namespace UniversityApp.Controllers
             } 
         }
 
-        [Authorize(Policy = "AdminPolicy")]
+        [Authorize(Policy = "ProfessorPolicy")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteSubject(Guid id)
         {
@@ -167,6 +167,7 @@ namespace UniversityApp.Controllers
             } 
         }
 
+        [Authorize(Policy = "ProfessorPolicy")]
         [HttpPost("/addUserToSubject")]
         public async Task<ActionResult> AddUserToSubject(AddUserToSubjectDto addUserToSubjectDto)
         {
@@ -197,6 +198,7 @@ namespace UniversityApp.Controllers
             } 
         }
         
+        [Authorize(Policy = "UserPolicy")]
         [HttpPost("/getSubjectsOfUser/{id}")]
         public async Task<ActionResult> GetSubjectsOfUser(Guid id)
         {

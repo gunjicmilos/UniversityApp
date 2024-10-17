@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UniversityApp.Services.Interfaces;
 using UniversityManagament.Models.Dto;
@@ -22,6 +23,7 @@ public class GradeController : ControllerBase
     }
     
     
+    [Authorize(Policy = "ProfessorPolicy")]
     [HttpPost]
     public async Task<ActionResult> CreateGrade(CreateGradeDto createGradeDto)
     {
@@ -47,6 +49,7 @@ public class GradeController : ControllerBase
         }
     }
     
+    [Authorize(Policy = "UserPolicy")]
     [HttpPost("api/grade")]
     public async Task<ActionResult> GetGrade(GetGradeDto getGradeDto)
     {
