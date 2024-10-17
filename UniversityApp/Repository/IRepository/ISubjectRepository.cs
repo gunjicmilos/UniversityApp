@@ -12,4 +12,6 @@ public interface ISubjectRepository
     Task CreateSubject(Subject subject);
     Task UpdateSubject(Subject subject);
     Task DeleteSubject(Subject subject);
+    Task AddUserToSubject (UserSubject userSubject);
+    Task<List<UserSubject>> GetAllSubjectsOfUserAsync(Guid id);
 }

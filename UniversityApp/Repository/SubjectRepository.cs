@@ -68,4 +68,16 @@ public class SubjectRepository : ISubjectRepository
         _context.Subjects.Remove(subject);
         await _context.SaveChangesAsync();
     }
+
+    public async Task AddUserToSubject(UserSubject userSubject)
+    {
+        _context.UserSubjects.Add(userSubject);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<List<UserSubject>> GetAllSubjectsOfUserAsync(Guid id)
+    {
+        var subjects = await _context.UserSubjects.Where(us => us.UserId == id).ToListAsync();
+        return subjects;
+    }
 }

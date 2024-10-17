@@ -42,7 +42,7 @@ public class GradeController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error occurred while fetching departments.");
+            _logger.LogError(ex, "Error occurred while adding grades.");
             return StatusCode(500, $"Internal server error: {ex.Message}");
         }
     }
@@ -67,7 +67,7 @@ public class GradeController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error occurred while fetching departments.");
+            _logger.LogError(ex, "Error occurred while fetching grades.");
             return StatusCode(500, $"Internal server error: {ex.Message}");
         }
     }

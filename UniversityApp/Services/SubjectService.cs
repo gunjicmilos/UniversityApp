@@ -99,4 +99,14 @@ public class SubjectService : ISubjectService
 
             return subject;
         }
+
+        public async Task AddUserToSubject(UserSubject userSubject)
+        {
+            await _subjectRepository.AddUserToSubject(userSubject);
+        }
+
+        public async Task<IEnumerable<UserSubject>> GetSubjects(Guid id)
+        {
+            return await _subjectRepository.GetAllSubjectsOfUserAsync(id);
+        }
 }

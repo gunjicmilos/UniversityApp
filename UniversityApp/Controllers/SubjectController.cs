@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using UniversityApp.Models;
 using UniversityApp.Services.Interfaces;
 using UniversityManagament.Models.Dto;
 
@@ -162,6 +163,56 @@ namespace UniversityApp.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error occurred while deleting subjects.");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            } 
+        }
+
+        [HttpPost("/addUserToSubject")]
+        public async Task<ActionResult> AddUserToSubject(AddUserToSubjectDto addUserToSubjectDto)
+        {
+            try
+            {
+                if (await _subjectService.GetSubjectsById(addUserToSubjectDto.SubjectId) == null)
+                {
+                    return BadRequest("Subject Not Found");
+                }
+
+                if (await _userService.GetUserAsync(addUserToSubjectDto.UserId) == null)
+                {
+                    return BadRequest("User Not Found");
+                }
+
+                var userSubject = new UserSubject()
+                {
+                    UserId = addUserToSubjectDto.UserId,
+                    SubjectId = addUserToSubjectDto.SubjectId
+                };
+                await _subjectService.AddUserToSubject(userSubject);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while adding user to subject.");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            } 
+        }
+        
+        [HttpPost("/getSubjectsOfUser/{id}")]
+        public async Task<ActionResult> GetSubjectsOfUser(Guid id)
+        {
+            try
+            {
+                if (await _userService.GetUserAsync(id) == null)
+                {
+                    return BadRequest("User Not Found");
+                }
+
+                var result = await _subjectService.GetSubjects(id);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while fetching subjects.");
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             } 
         }

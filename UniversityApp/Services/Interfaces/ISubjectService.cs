@@ -10,4 +10,6 @@ public interface ISubjectService
     Task<SubjectDto> CreateSubject(CreateSubjectDto createSubjectDto);
     Task<Subject> UpdateSubject(Guid id, CreateSubjectDto updateSubjectDto);
     Task<Subject> DeleteSubject(Guid id);
+    Task AddUserToSubject(UserSubject userSubject);
+    Task<IEnumerable<UserSubject>> GetSubjects(Guid id);
 }
