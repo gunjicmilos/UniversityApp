@@ -124,7 +124,7 @@ namespace UniversityApp.Controllers
             } 
         }
         
-        [HttpPost("login2")]
+        [HttpPost("login")]
         public async Task<ActionResult<string>> Login2([FromBody] LoginDto loginRequest)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
