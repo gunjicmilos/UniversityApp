@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UniversityApp.Models;
 using UniversityApp.Services.Interfaces;
@@ -21,7 +22,7 @@ public class TransactionController : ControllerBase
         _logger = logger;
     }
 
-    //[Authorize(Policy = "FinancePolicy")]
+    [Authorize(Policy = "AdminPolicy")]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<BankTransaction>>> GetTransactions()
     {
@@ -36,7 +37,7 @@ public class TransactionController : ControllerBase
         } 
     }
 
-    //[Authorize(Policy = "FinancePolicy")]
+    [Authorize(Policy = "AdminPolicy")]
     [HttpGet("{id}")]
     public async Task<ActionResult<BankTransaction>> GetTransaction(Guid id)
     {
@@ -75,7 +76,7 @@ public class TransactionController : ControllerBase
     }
 
 
-    //[Authorize(Policy = "FinancePolicy")]
+    [Authorize(Policy = "AdminPolicy")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteTransaction(Guid id)
     {

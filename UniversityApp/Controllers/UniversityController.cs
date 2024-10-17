@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using UniversityApp.Controllers;
 using UniversityApp.Services.Interfaces;
 using UniversityManagament.Models.Dto;
@@ -59,7 +60,7 @@ namespace UniversityManagament.Controllers
             }   
         }
 
-        //[Authorize(Policy = "AdminPolicy")]
+        [Authorize(Policy = "AdminPolicy")]
         [HttpPost]
         public async Task<ActionResult<UniversityDto>> CreateUniversity(CreateUniversityDto createUniversityDto)
         {
@@ -82,7 +83,7 @@ namespace UniversityManagament.Controllers
             } 
         }
 
-        //[Authorize(Policy = "AdminPolicy")]
+        [Authorize(Policy = "AdminPolicy")]
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateUniversitiy(Guid id, CreateUniversityDto updateUniversityDto)
         {
@@ -96,7 +97,7 @@ namespace UniversityManagament.Controllers
             return NoContent();
         }
 
-        //[Authorize(Policy = "AdminPolicy")]
+        [Authorize(Policy = "AdminPolicy")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteUniversitiy(Guid id)
         {

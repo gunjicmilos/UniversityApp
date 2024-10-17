@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using UniversityApp.Services.Interfaces;
@@ -57,6 +58,7 @@ namespace UniversityApp.Controllers
             } 
         }
 
+        [Authorize(Policy = "AdminPolicy")]
         [HttpPost]
         public async Task<ActionResult<UserDto>> CreateUser(CreateUserDto createUserDto)
         {
@@ -78,6 +80,7 @@ namespace UniversityApp.Controllers
             } 
         }
 
+        [Authorize(Policy = "AdminPolicy")]
         [HttpPut("{id}")]
         public async Task<ActionResult<UserDto>> UpdateUser(Guid id, CreateUserDto updateUserDto)
         {
@@ -99,6 +102,7 @@ namespace UniversityApp.Controllers
             } 
         }
 
+        [Authorize(Policy = "AdminPolicy")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<UserDto>> DeleteUser(Guid id)
         {
@@ -121,17 +125,23 @@ namespace UniversityApp.Controllers
         }
         
         [HttpPost("login2")]
-        public string Login2([FromBody] LoginDto loginRequest)
+        public async Task<ActionResult<string>> Login2([FromBody] LoginDto loginRequest)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes("your_secret_key31231231231231312312312312");
+            
+            var user = await _userService.ValidateUserAsync(loginRequest.Username, loginRequest.Password);
+            if (user == null)
+            {
+                return Unauthorized("Invalid credentials.");
+            }
     
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim(ClaimTypes.Name, loginRequest.Username),
-                    new Claim(ClaimTypes.Role, "Admin") // Dodaj rolu u token
+                    new Claim(ClaimTypes.Role, user.Role)
                 }),
                 Expires = DateTime.UtcNow.AddHours(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

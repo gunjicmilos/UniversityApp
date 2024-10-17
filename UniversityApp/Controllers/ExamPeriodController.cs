@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using UniversityApp.Services.Interfaces;
 using UniversityManagament.Models.Dto;
 
@@ -55,7 +56,7 @@ namespace UniversityApp.Controllers
             } 
         }
 
-        //[Authorize(Policy = "AdminPolicy")]
+        [Authorize(Policy = "AdminPolicy")]
         [HttpPost]
         public async Task<ActionResult<ExamDto>> CreateExamPeriod(CreateExamPeriodDto createExamPeriodDto)
         {
@@ -85,7 +86,7 @@ namespace UniversityApp.Controllers
             } 
         }
 
-        //[Authorize(Policy = "AdminPolicy")]
+        [Authorize(Policy = "AdminPolicy")]
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateExamPerion(Guid id, CreateExamPeriodDto updateExamPeriodDto)
         {
@@ -120,7 +121,7 @@ namespace UniversityApp.Controllers
             } 
         }
 
-        //[Authorize(Policy = "AdminPolicy")]
+        [Authorize(Policy = "AdminPolicy")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteExamPerion(Guid id)
         {

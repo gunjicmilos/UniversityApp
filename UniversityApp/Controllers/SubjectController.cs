@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using UniversityApp.Services.Interfaces;
 using UniversityManagament.Models.Dto;
 
@@ -57,7 +58,7 @@ namespace UniversityApp.Controllers
             } 
         }
 
-        //[Authorize(Policy = "AdminPolicy")]
+        [Authorize(Policy = "AdminPolicy")]
         [HttpPost]
         public async Task<ActionResult<SubjectDto>> CreateSubject(CreateSubjectDto createSubjectDto)
         {
@@ -93,7 +94,7 @@ namespace UniversityApp.Controllers
             } 
         }
 
-        //[Authorize(Policy = "AdminPolicy")]
+        [Authorize(Policy = "AdminPolicy")]
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateSubject(Guid id, CreateSubjectDto updateSubjectDto)
         {
@@ -143,7 +144,7 @@ namespace UniversityApp.Controllers
             } 
         }
 
-        //[Authorize(Policy = "AdminPolicy")]
+        [Authorize(Policy = "AdminPolicy")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteSubject(Guid id)
         {

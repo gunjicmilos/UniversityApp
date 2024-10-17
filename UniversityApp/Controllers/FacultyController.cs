@@ -55,7 +55,7 @@ namespace UniversityApp.Controllers
             } 
         }
 
-        //[Authorize(Policy = "AdminPolicy")]
+        [Authorize(Policy = "AdminPolicy")]
         [HttpPost]
         public async Task<ActionResult<FacultyDto>> CreateFaculty(CreateFacultyDto createFacultyDto)
         {
@@ -78,7 +78,7 @@ namespace UniversityApp.Controllers
             } 
         }
 
-        //[Authorize(Policy = "AdminPolicy")]
+        [Authorize(Policy = "AdminPolicy")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateFaculty(Guid id, CreateFacultyDto updateFacultyDto)
         {
@@ -100,7 +100,7 @@ namespace UniversityApp.Controllers
             } 
         }
 
-        //[Authorize(Policy = "AdminPolicy")]
+        [Authorize(Policy = "AdminPolicy")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteFaculty(Guid id)
         {
@@ -122,7 +122,7 @@ namespace UniversityApp.Controllers
             } 
         }
 
-        //[Authorize(Policy = "AdminPolicy")]
+        [Authorize(Policy = "AdminPolicy")]
         [HttpPost("/addUser")]
         public async Task<ActionResult> AddUserToFaculty(AssignUserDto addUserDto)
         {

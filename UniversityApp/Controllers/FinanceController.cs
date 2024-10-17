@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UniversityApp.Repository.IRepository;
 using UniversityApp.Services.Interfaces;
@@ -20,7 +21,7 @@ public class FinanceController : ControllerBase
         _logger = logger;
     }
 
-    //[Authorize(Policy = "FinancePolicy")]
+    [Authorize(Policy = "AdminPolicy")]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<FinanceReadDto>>> GetAllFinances()
     {
@@ -36,7 +37,7 @@ public class FinanceController : ControllerBase
         } 
     }
 
-    //[Authorize(Policy = "FinancePolicy")]
+    [Authorize(Policy = "AdminPolicy")]
     [HttpGet("{id}")]
     public async Task<ActionResult<FinanceReadDto>> GetFinanceById(Guid id)
     {
@@ -57,7 +58,7 @@ public class FinanceController : ControllerBase
         } 
     }
 
-    //[Authorize(Policy = "FinancePolicy")]
+    [Authorize(Policy = "AdminPolicy")]
     [HttpPost]
     public async Task<ActionResult<FinanceReadDto>> CreateFinance(FinanceCreateDto financeCreateDto)
     {
@@ -77,7 +78,7 @@ public class FinanceController : ControllerBase
         } 
     }
 
-    //[Authorize(Policy = "FinancePolicy")]
+    [Authorize(Policy = "AdminPolicy")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateFinance(Guid id, FinanceCreateDto financeUpdateDto)
     {
@@ -101,7 +102,7 @@ public class FinanceController : ControllerBase
         } 
     }
 
-    //[Authorize(Policy = "FinancePolicy")]
+    [Authorize(Policy = "AdminPolicy")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteFinance(Guid id)
     {

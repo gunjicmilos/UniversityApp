@@ -78,9 +78,9 @@ builder.Services.AddAuthentication(x =>
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("AdminPolicy", policy => policy.RequireRole("Admin"));
-    options.AddPolicy("ProfessorPolicy", policy => policy.RequireRole("profesor"));
-    options.AddPolicy("UserPolicy", policy => policy.RequireRole("user", "profesor", "admin")); // Za više rola
+    options.AddPolicy("AdminPolicy", policy => policy.RequireRole("admin"));
+    options.AddPolicy("ProfessorPolicy", policy => policy.RequireRole("professor"));
+    options.AddPolicy("UserPolicy", policy => policy.RequireRole("user", "professor", "admin")); // Za više rola
 });
 
 builder.Services.AddControllers();

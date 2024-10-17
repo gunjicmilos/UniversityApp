@@ -1,5 +1,6 @@
 using UniversityApp.Data;
 using UniversityApp.Models;
+using UniversityApp.Repository;
 using UniversityApp.Repository.IRepository;
 using UniversityApp.Services.Interfaces;
 using UniversityManagament.Models;
@@ -10,11 +11,10 @@ namespace UniversityApp.Services;
 public class UniversityService : IUniversityService
 {
     private readonly IUniversityRepository _universityRepository;
-    public UniversityService(DataContext context, IUniversityRepository universityRepository)
+    public UniversityService(IUniversityRepository universityRepository)
     {
         _universityRepository = universityRepository;
     }
-
     public async Task<List<UniversityDto>> GetUniversities(string? name = null, string? location = null)
     {
         var universities = await _universityRepository.GetAllUniversityAsync();
