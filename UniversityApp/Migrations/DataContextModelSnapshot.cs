@@ -22,7 +22,7 @@ namespace UniversityApp.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("UniversityManagament.Models.BankTransaction", b =>
+            modelBuilder.Entity("UniversityApp.Models.BankTransaction", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -52,7 +52,7 @@ namespace UniversityApp.Migrations
                     b.ToTable("BankTransactions");
                 });
 
-            modelBuilder.Entity("UniversityManagament.Models.Department", b =>
+            modelBuilder.Entity("UniversityApp.Models.Department", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -72,7 +72,7 @@ namespace UniversityApp.Migrations
                     b.ToTable("Departments");
                 });
 
-            modelBuilder.Entity("UniversityManagament.Models.Exam", b =>
+            modelBuilder.Entity("UniversityApp.Models.Exam", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -100,7 +100,7 @@ namespace UniversityApp.Migrations
                     b.ToTable("Exams");
                 });
 
-            modelBuilder.Entity("UniversityManagament.Models.ExamPeriod", b =>
+            modelBuilder.Entity("UniversityApp.Models.ExamPeriod", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -126,31 +126,7 @@ namespace UniversityApp.Migrations
                     b.ToTable("ExamPeriods");
                 });
 
-            modelBuilder.Entity("UniversityManagament.Models.Faculty", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Location")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("UniversityId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UniversityId");
-
-                    b.ToTable("Faculties");
-                });
-
-            modelBuilder.Entity("UniversityManagament.Models.Finance", b =>
+            modelBuilder.Entity("UniversityApp.Models.Finance", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -176,7 +152,27 @@ namespace UniversityApp.Migrations
                     b.ToTable("Finances");
                 });
 
-            modelBuilder.Entity("UniversityManagament.Models.Subject", b =>
+            modelBuilder.Entity("UniversityApp.Models.StudentSubjectGrade", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Grade")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("SubjectId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("StudentSubjectGrades");
+                });
+
+            modelBuilder.Entity("UniversityApp.Models.Subject", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -202,7 +198,7 @@ namespace UniversityApp.Migrations
                     b.ToTable("Subjects");
                 });
 
-            modelBuilder.Entity("UniversityManagament.Models.University", b =>
+            modelBuilder.Entity("UniversityApp.Models.University", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -221,7 +217,7 @@ namespace UniversityApp.Migrations
                     b.ToTable("Universities");
                 });
 
-            modelBuilder.Entity("UniversityManagament.Models.User", b =>
+            modelBuilder.Entity("UniversityApp.Models.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -251,7 +247,7 @@ namespace UniversityApp.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("UniversityManagament.Models.UserExam", b =>
+            modelBuilder.Entity("UniversityApp.Models.UserExam", b =>
                 {
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -266,7 +262,7 @@ namespace UniversityApp.Migrations
                     b.ToTable("UserExams");
                 });
 
-            modelBuilder.Entity("UniversityManagament.Models.UserFaculty", b =>
+            modelBuilder.Entity("UniversityApp.Models.UserFaculty", b =>
                 {
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -281,7 +277,7 @@ namespace UniversityApp.Migrations
                     b.ToTable("UserFaculties");
                 });
 
-            modelBuilder.Entity("UniversityManagament.Models.UserSubject", b =>
+            modelBuilder.Entity("UniversityApp.Models.UserSubject", b =>
                 {
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -296,7 +292,31 @@ namespace UniversityApp.Migrations
                     b.ToTable("UserSubjects");
                 });
 
-            modelBuilder.Entity("UniversityManagament.Models.Department", b =>
+            modelBuilder.Entity("UniversityManagament.Models.Faculty", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("UniversityId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UniversityId");
+
+                    b.ToTable("Faculties");
+                });
+
+            modelBuilder.Entity("UniversityApp.Models.Department", b =>
                 {
                     b.HasOne("UniversityManagament.Models.Faculty", "Faculty")
                         .WithMany("Departments")
@@ -307,15 +327,15 @@ namespace UniversityApp.Migrations
                     b.Navigation("Faculty");
                 });
 
-            modelBuilder.Entity("UniversityManagament.Models.Exam", b =>
+            modelBuilder.Entity("UniversityApp.Models.Exam", b =>
                 {
-                    b.HasOne("UniversityManagament.Models.ExamPeriod", "ExamPeriod")
+                    b.HasOne("UniversityApp.Models.ExamPeriod", "ExamPeriod")
                         .WithMany()
                         .HasForeignKey("ExamPeriodId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("UniversityManagament.Models.Subject", "Subject")
+                    b.HasOne("UniversityApp.Models.Subject", "Subject")
                         .WithMany()
                         .HasForeignKey("SubjectId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -326,7 +346,7 @@ namespace UniversityApp.Migrations
                     b.Navigation("Subject");
                 });
 
-            modelBuilder.Entity("UniversityManagament.Models.ExamPeriod", b =>
+            modelBuilder.Entity("UniversityApp.Models.ExamPeriod", b =>
                 {
                     b.HasOne("UniversityManagament.Models.Faculty", "Faculty")
                         .WithMany("ExamPeriods")
@@ -337,18 +357,7 @@ namespace UniversityApp.Migrations
                     b.Navigation("Faculty");
                 });
 
-            modelBuilder.Entity("UniversityManagament.Models.Faculty", b =>
-                {
-                    b.HasOne("UniversityManagament.Models.University", "University")
-                        .WithMany("Faculties")
-                        .HasForeignKey("UniversityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("University");
-                });
-
-            modelBuilder.Entity("UniversityManagament.Models.Finance", b =>
+            modelBuilder.Entity("UniversityApp.Models.Finance", b =>
                 {
                     b.HasOne("UniversityManagament.Models.Faculty", "Faculty")
                         .WithMany()
@@ -359,9 +368,9 @@ namespace UniversityApp.Migrations
                     b.Navigation("Faculty");
                 });
 
-            modelBuilder.Entity("UniversityManagament.Models.Subject", b =>
+            modelBuilder.Entity("UniversityApp.Models.Subject", b =>
                 {
-                    b.HasOne("UniversityManagament.Models.Department", "Department")
+                    b.HasOne("UniversityApp.Models.Department", "Department")
                         .WithMany("Subjects")
                         .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -370,15 +379,15 @@ namespace UniversityApp.Migrations
                     b.Navigation("Department");
                 });
 
-            modelBuilder.Entity("UniversityManagament.Models.UserExam", b =>
+            modelBuilder.Entity("UniversityApp.Models.UserExam", b =>
                 {
-                    b.HasOne("UniversityManagament.Models.Exam", "Exam")
+                    b.HasOne("UniversityApp.Models.Exam", "Exam")
                         .WithMany("UserExams")
                         .HasForeignKey("ExamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("UniversityManagament.Models.User", "User")
+                    b.HasOne("UniversityApp.Models.User", "User")
                         .WithMany("UserExams")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -389,7 +398,7 @@ namespace UniversityApp.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("UniversityManagament.Models.UserFaculty", b =>
+            modelBuilder.Entity("UniversityApp.Models.UserFaculty", b =>
                 {
                     b.HasOne("UniversityManagament.Models.Faculty", "Faculty")
                         .WithMany("UserFaculties")
@@ -397,7 +406,7 @@ namespace UniversityApp.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("UniversityManagament.Models.User", "User")
+                    b.HasOne("UniversityApp.Models.User", "User")
                         .WithMany("UserFaculties")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -408,15 +417,15 @@ namespace UniversityApp.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("UniversityManagament.Models.UserSubject", b =>
+            modelBuilder.Entity("UniversityApp.Models.UserSubject", b =>
                 {
-                    b.HasOne("UniversityManagament.Models.Subject", "Subject")
+                    b.HasOne("UniversityApp.Models.Subject", "Subject")
                         .WithMany("UserSubjects")
                         .HasForeignKey("SubjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("UniversityManagament.Models.User", "User")
+                    b.HasOne("UniversityApp.Models.User", "User")
                         .WithMany("UserSubjects")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -427,14 +436,44 @@ namespace UniversityApp.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("UniversityManagament.Models.Department", b =>
+            modelBuilder.Entity("UniversityManagament.Models.Faculty", b =>
+                {
+                    b.HasOne("UniversityApp.Models.University", "University")
+                        .WithMany("Faculties")
+                        .HasForeignKey("UniversityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("University");
+                });
+
+            modelBuilder.Entity("UniversityApp.Models.Department", b =>
                 {
                     b.Navigation("Subjects");
                 });
 
-            modelBuilder.Entity("UniversityManagament.Models.Exam", b =>
+            modelBuilder.Entity("UniversityApp.Models.Exam", b =>
                 {
                     b.Navigation("UserExams");
+                });
+
+            modelBuilder.Entity("UniversityApp.Models.Subject", b =>
+                {
+                    b.Navigation("UserSubjects");
+                });
+
+            modelBuilder.Entity("UniversityApp.Models.University", b =>
+                {
+                    b.Navigation("Faculties");
+                });
+
+            modelBuilder.Entity("UniversityApp.Models.User", b =>
+                {
+                    b.Navigation("UserExams");
+
+                    b.Navigation("UserFaculties");
+
+                    b.Navigation("UserSubjects");
                 });
 
             modelBuilder.Entity("UniversityManagament.Models.Faculty", b =>
@@ -444,25 +483,6 @@ namespace UniversityApp.Migrations
                     b.Navigation("ExamPeriods");
 
                     b.Navigation("UserFaculties");
-                });
-
-            modelBuilder.Entity("UniversityManagament.Models.Subject", b =>
-                {
-                    b.Navigation("UserSubjects");
-                });
-
-            modelBuilder.Entity("UniversityManagament.Models.University", b =>
-                {
-                    b.Navigation("Faculties");
-                });
-
-            modelBuilder.Entity("UniversityManagament.Models.User", b =>
-                {
-                    b.Navigation("UserExams");
-
-                    b.Navigation("UserFaculties");
-
-                    b.Navigation("UserSubjects");
                 });
 #pragma warning restore 612, 618
         }

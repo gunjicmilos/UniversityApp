@@ -18,7 +18,6 @@ namespace UniversityApp.Controllers
             _logger = logger;
         }
 
-        [Authorize(Policy = "AdminPolicy")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<FacultyDto>>> GetFaculties([FromQuery] string? name = null, [FromQuery] string? location = null, [FromQuery] Guid? UniversityId = null)
         {

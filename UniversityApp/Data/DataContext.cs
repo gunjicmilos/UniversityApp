@@ -23,6 +23,7 @@ namespace UniversityApp.Data
         public DbSet<UserExam> UserExams { get; set; }
         public DbSet<Finance> Finances { get; set; }
         public DbSet<BankTransaction> BankTransactions { get; set; }
+        public DbSet<StudentSubjectGrade> StudentSubjectGrades { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
